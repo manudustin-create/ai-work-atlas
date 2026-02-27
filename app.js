@@ -397,6 +397,9 @@ function checkHash() {
     var h = location.hash.slice(1);
     if (h && DATA.find(function(d) { return d.id === h; })) {
         showDetail(h);
+        // Scroll fino al tile corrispondente
+        var tileEl = document.querySelector('.tile[data-id="' + h + '"]');
+        if (tileEl) tileEl.scrollIntoView({behavior:'smooth', block:'center'});
     }
 }
 
