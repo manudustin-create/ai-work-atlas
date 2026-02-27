@@ -980,20 +980,7 @@
 </nav>
 
 <section class="top-bar">
-    <div class="bands">
-        <div class="band band-s0">
-            <span class="band-tag">S0</span>
-            <span class="band-title">Sfondo Cognitivo — AI as System 0</span>
-            <p class="band-text">AI come ambiente di pre-selezione e sintesi: i default diventano comportamento. Rischio: deferenza, appiattimento del contraddittorio, cattura dei criteri di realtà.</p>
-            <span class="band-link" onclick="showDetail('S0')">Scheda →</span>
-        </div>
-        <div class="band band-ex">
-            <span class="band-tag">EX</span>
-            <span class="band-title">Sfondo Economico-Politico — General Intellect</span>
-            <p class="band-text">Cattura del sapere sociale e trasformazione in rendita infrastrutturale. Rischio: lock-in, appropriazione, lavoro invisibile e polarizzazione.</p>
-            <span class="band-link" onclick="showDetail('CAP')">Scheda →</span>
-        </div>
-    </div>
+    <div class="bands" id="bands"></div>
 </section>
 
 <div class="main-layout">
@@ -1214,6 +1201,11 @@ var OVERLAYS = [
 
 OVERLAYS.forEach(function(o) { o.n = DATA.filter(function(d) { return d.overlays.includes(o.c); }).length; });
 
+var BANDS = [
+    {code:'S0', css:'band-s0', title:'Sfondo Cognitivo — AI as System 0', text:'AI come ambiente di pre-selezione e sintesi: i default diventano comportamento. Rischio: deferenza, appiattimento del contraddittorio, cattura dei criteri di realtà.', link:'S0'},
+    {code:'EX', css:'band-ex', title:'Sfondo Economico-Politico — General Intellect', text:'Cattura del sapere sociale e trasformazione in rendita infrastrutturale. Rischio: lock-in, appropriazione, lavoro invisibile e polarizzazione.', link:'CAP'}
+];
+
 var lens = null;
 
 var OV_SVG = {
@@ -1256,6 +1248,7 @@ function validateData() {
 
 function init() {
     validateData();
+    buildBands();
     buildLenses();
     buildMatrix();
     $('#search').addEventListener('input', filter);
@@ -1267,6 +1260,37 @@ function init() {
 }
 
 
+
+function buildBands() {
+    var container = $('#bands');
+    BANDS.forEach(function(b) {
+        var div = document.createElement('div');
+        div.className = 'band ' + b.css;
+
+        var tag = document.createElement('span');
+        tag.className = 'band-tag';
+        tag.textContent = b.code;
+        div.appendChild(tag);
+
+        var title = document.createElement('span');
+        title.className = 'band-title';
+        title.textContent = b.title;
+        div.appendChild(title);
+
+        var text = document.createElement('p');
+        text.className = 'band-text';
+        text.textContent = b.text;
+        div.appendChild(text);
+
+        var link = document.createElement('span');
+        link.className = 'band-link';
+        link.textContent = 'Scheda →';
+        link.onclick = function() { showDetail(b.link); };
+        div.appendChild(link);
+
+        container.appendChild(div);
+    });
+}
 
 function buildLenses() {
     var c = $('#lenses');
