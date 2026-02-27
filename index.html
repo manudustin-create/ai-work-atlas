@@ -486,95 +486,6 @@
         
 
         
-        /* Dichotomies strip */
-        .dicho-strip {
-            grid-column: 2 / -1;
-            background: var(--grey-05);
-            border-bottom: 1px solid var(--black);
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 0;
-            padding: 5px 0;
-            align-items: center;
-        }
-        
-        .dicho-cell {
-            padding: 4px 6px;
-            border-right: 1px solid var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .dicho-cell:last-child {
-            border-right: none;
-        }
-        
-        .dicho-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 3px;
-            justify-content: center;
-        }
-        
-        .dicho-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            padding: 1px 4px;
-            background: var(--grey-10);
-            border-radius: 2px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.48rem;
-            color: var(--grey-50);
-            cursor: help;
-            transition: all 0.15s ease;
-            white-space: nowrap;
-        }
-        
-        .dicho-chip:hover {
-            background: var(--accent-bg);
-            color: var(--grey-70);
-        }
-        
-        .dicho-chip .dicho-arrow {
-            color: var(--grey-30);
-            font-size: 0.4rem;
-        }
-        
-        .dicho-strong {
-            font-weight: 700;
-            color: var(--grey-70);
-        }
-        
-        .dicho-chip:hover .dicho-strong {
-            color: var(--accent);
-        }
-        
-        /* Legacy classes (unused but kept for safety) */
-        .inforg-strip-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--grey-70);
-        }
-        
-        .inforg-strip-desc {
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.65rem;
-            color: var(--grey-50);
-            font-style: italic;
-        }
-        
-        .inforg-strip-kw {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.55rem;
-            color: var(--grey-40);
-            margin-top: 2px;
-        }
-        
         /* Anthropological label for Worker row cells */
         .cell-anthro-label {
             font-family: 'Space Mono', monospace;
@@ -1187,15 +1098,6 @@ var COLS = [
             {k:'OS',t:'Operating System',s:'infrastructural'}
         ];
 
-var SUBHEADS = [
-    {text:'Heteromated/Ghost inforg', chips:['EX']},
-    {text:'Augmented inforg', chips:['K','S0']},
-    {text:'Antiquated/Idiot inforg', chips:['G','S0']},
-    {text:'Quantified inforg', chips:['K','EX']},
-    {text:'Branded inforg', chips:['N']},
-    {text:'System-shaped inforg', chips:['CT','T']}
-];
-
 // Anthropological conception labels for Worker row (mapped by column key)
 var ANTHRO_LABELS = {
     'Estrattiva': 'Heteromated / Ghost',
@@ -1215,38 +1117,6 @@ var INFORG_TRIADS = {
     'OS':         { id:'system-shaped', ag:'preconfigured', ct:'infrastructural' }
 };
 
-var DICHOTOMIES = {
-    'Estrattiva': [
-        {l:'Human', r:'Machine', dominant:'Human'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Deskilling'},
-        {l:'Innovation', r:'Compliance', dominant:'Compliance'}
-    ],
-    'Tool': [
-        {l:'Human', r:'Machine', dominant:'Human'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Augmentation'},
-        {l:'Innovation', r:'Compliance', dominant:'Innovation'}
-    ],
-    'Oracolo': [
-        {l:'Human', r:'Machine', dominant:'Machine'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Deskilling'},
-        {l:'Innovation', r:'Compliance', dominant:'Compliance'}
-    ],
-    'Mgmt': [
-        {l:'Human', r:'Machine', dominant:'Machine'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Deskilling'},
-        {l:'Innovation', r:'Compliance', dominant:'Compliance'}
-    ],
-    'Visibilità': [
-        {l:'Human', r:'Machine', dominant:'Machine'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Deskilling'},
-        {l:'Innovation', r:'Compliance', dominant:'Innovation'}
-    ],
-    'OS': [
-        {l:'Human', r:'Machine', dominant:'Machine'},
-        {l:'Augmentation', r:'Deskilling', dominant:'Deskilling'},
-        {l:'Innovation', r:'Compliance', dominant:'Compliance'}
-    ]
-};
 
 
 
@@ -1294,10 +1164,6 @@ var CELL_KWS = {
 };
 
 var CELL_EMPTY = {
-    "Worker": {
-        "Mgmt": "indirect effect → see HR",
-        "OS": "macro level → see Organization"
-    },
     "HR": {
         "Visibilità": "individual dynamic → see Worker/VIS",
         "OS": "org. orchestration → see Organization"
