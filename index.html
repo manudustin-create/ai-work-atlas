@@ -1234,7 +1234,31 @@ var OV_ICON = OV_SVG;
 function $(s) { return document.querySelector(s); }
 function $$(s) { return document.querySelectorAll(s); }
 
+function validateData() {
+    var colKeys = COLS.map(function(c) { return c.k; });
+    var warns = [];
+    DATA.forEach(function(d) {
+        if (!d.role) warns.push('DATA id="' + d.id + '" ha role null (manca in ROLE map)');
+        if (d.role && colKeys.indexOf(d.role) === -1) warns.push('DATA id="' + d.id + '" role="' + d.role + '" non corrisponde a nessuna colonna');
+        if (ROWS.indexOf(d.layer) === -1) warns.push('DATA id="' + d.id + '" layer="' + d.layer + '" non corrisponde a nessuna riga');
+    });
+    ROWS.forEach(function(row) {
+        colKeys.forEach(function(col) {
+            var items = DATA.filter(function(d) { return d.layer === row && d.role === col; });
+            var hasKw = CELL_KWS[row] && CELL_KWS[row][col] && CELL_KWS[row][col] !== '—';
+            if (items.length > 0 && !hasKw) warns.push('Cella ' + row + '×' + col + ': ha ' + items.length + ' tile ma manca in CELL_KWS');
+        });
+    });
+    if (warns.length) {
+        console.warn('[AI&Work Atlas] Validazione dati (' + warns.length + ' warning):');
+        warns.forEach(function(w) { console.warn('  ⚠ ' + w); });
+    } else {
+        console.log('[AI&Work Atlas] Validazione dati OK');
+    }
+}
+
 function init() {
+    validateData();
     buildLenses();
     buildMatrix();
     $('#search').addEventListener('input', filter);
