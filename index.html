@@ -365,8 +365,7 @@
 
         .matrix {
             display: grid;
-            grid-template-columns: 100px repeat(6, 1fr);
-            grid-template-rows: auto auto repeat(4, minmax(110px, 1fr));
+            /* grid-template-columns/rows impostati da buildMatrix() */
             max-width: 1200px;
             width: 100%;
             align-content: start;
@@ -449,11 +448,9 @@
             grid-column: 2 / -1;
             background: var(--grey-05);
             border-bottom: 1px solid var(--black);
-            /* da colonna verticale → a griglia orizzontale */
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            /* grid-template-columns impostato da buildMatrix() */
             gap: 0;
-            /* riduci altezza */
             padding: 6px 0;
             align-items: center;
         }
@@ -1305,7 +1302,11 @@ function toggleView() {
 function buildMatrix() {
     var m = $('#matrix');
     m.innerHTML = '';
-    
+
+    // Grid dinamica: colonne e righe calcolate da COLS/ROWS
+    m.style.gridTemplateColumns = '100px repeat(' + COLS.length + ', 1fr)';
+    m.style.gridTemplateRows = 'auto auto repeat(' + ROWS.length + ', minmax(110px, 1fr))';
+
     // Build header via DOM to avoid innerHTML += destroying event listeners
     var corner = document.createElement('div');
     corner.className = 'matrix-corner';
@@ -1325,6 +1326,7 @@ function buildMatrix() {
 
     var inforgStrip = document.createElement('div');
     inforgStrip.className = 'inforg-strip';
+    inforgStrip.style.gridTemplateColumns = 'repeat(' + COLS.length + ', 1fr)';
     inforgStrip.innerHTML = COLS.map(function(col){
         var t = INFORG_TRIADS[col.k];
         if(!t) return '<div class="inforg-cell" title="—">—</div>';
