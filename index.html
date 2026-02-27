@@ -1483,7 +1483,7 @@ function filter() {
 function showDetail(id) {
     var item = DATA.find(function(d) { return d.id === id; });
     if (!item) return;
-    
+
     var FAMILY_COLOR = {
         Augment:'--c-augment',
         Govern:'--c-govern',
@@ -1492,35 +1492,91 @@ function showDetail(id) {
         Judge:'--c-judge',
         Architect:'--c-architect'
     };
-    
+
     $$('.tile').forEach(function(t) { t.classList.remove('active'); });
     var tileEl = document.querySelector('.tile[data-id="' + id + '"]');
     if (tileEl) tileEl.classList.add('active');
-    
+
     history.replaceState(null, '', '#' + id);
-    
+
     document.getElementById('panel-placeholder').style.display = 'none';
     var pc = document.getElementById('panel-content');
     pc.style.display = 'block';
-    
-    pc.innerHTML = '<div class="panel-header">' +
-        '<div class="panel-id" style="color:var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')">' + item.id + '</div>' +
-        '<div class="panel-name">' + item.name + '</div>' +
-        '<div class="panel-meta">' +
-            '<div class="panel-tag">Family: <span>' + item.family + '</span></div>' +
-            '<div class="panel-tag">Layer: <span>' + item.layer + '</span></div>' +
-            '<div class="panel-tag">Role: <span>' + (item.role || '—') + '</span></div>' +
-        '</div>' +
-        '<div class="panel-overlays">' + item.overlays.map(function(o){ return '<span class="panel-overlay">' + o + '</span>'; }).join('') + '</div>' +
-        '<div class="panel-close" onclick="hideDetail()">✕ Chiudi</div>' +
-    '</div>' +
-    '<div class="panel-body">' +
-        '<div class="panel-section"><h3>Definizione</h3><p>' + item.definition + '</p></div>' +
-        '<div class="panel-section"><h3>Segnali</h3><ul>' + item.signals.map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="panel-section"><h3>Failure mode</h3><div class="panel-callout failure">' + item.failure + '</div></div>' +
-        '<div class="panel-section"><h3>Guardrail</h3><div class="panel-callout guardrail">' + item.guardrail + '</div></div>' +
-        '<div class="panel-section"><h3>Sources</h3><div class="panel-sources">' + item.sources.map(function(s){ return '<span class="panel-source">' + s + '</span>'; }).join(' · ') + '</div></div>' +
-    '</div>';
+    pc.innerHTML = '';
+
+    // Helper: crea elemento con classe e testo
+    function el(tag, cls, text) {
+        var e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text) e.textContent = text;
+        return e;
+    }
+
+    // Header
+    var header = el('div', 'panel-header');
+
+    var idEl = el('div', 'panel-id', item.id);
+    idEl.style.color = 'var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')';
+    header.appendChild(idEl);
+
+    header.appendChild(el('div', 'panel-name', item.name));
+
+    var meta = el('div', 'panel-meta');
+    [['Family', item.family], ['Layer', item.layer], ['Role', item.role || '—']].forEach(function(pair) {
+        var tag = el('div', 'panel-tag');
+        tag.textContent = pair[0] + ': ';
+        var span = document.createElement('span');
+        span.textContent = pair[1];
+        tag.appendChild(span);
+        meta.appendChild(tag);
+    });
+    header.appendChild(meta);
+
+    var overlays = el('div', 'panel-overlays');
+    item.overlays.forEach(function(o) {
+        overlays.appendChild(el('span', 'panel-overlay', o));
+    });
+    header.appendChild(overlays);
+
+    var close = el('div', 'panel-close', '✕ Chiudi');
+    close.onclick = hideDetail;
+    header.appendChild(close);
+
+    pc.appendChild(header);
+
+    // Body
+    var body = el('div', 'panel-body');
+
+    // Sezione generica
+    function addSection(title, content) {
+        var sec = el('div', 'panel-section');
+        sec.appendChild(el('h3', null, title));
+        sec.appendChild(content);
+        body.appendChild(sec);
+    }
+
+    addSection('Definizione', el('p', null, item.definition));
+
+    var ul = document.createElement('ul');
+    item.signals.forEach(function(s) {
+        ul.appendChild(el('li', null, s));
+    });
+    addSection('Segnali', ul);
+
+    var failDiv = el('div', 'panel-callout failure', item.failure);
+    addSection('Failure mode', failDiv);
+
+    var guardDiv = el('div', 'panel-callout guardrail', item.guardrail);
+    addSection('Guardrail', guardDiv);
+
+    var srcDiv = el('div', 'panel-sources');
+    item.sources.forEach(function(s, i) {
+        if (i > 0) srcDiv.appendChild(document.createTextNode(' · '));
+        srcDiv.appendChild(el('span', 'panel-source', s));
+    });
+    addSection('Sources', srcDiv);
+
+    pc.appendChild(body);
 }
 
 function hideDetail() {
