@@ -947,11 +947,31 @@ body {
 
 @media (max-width: 800px) {
     .main-layout { flex-direction: column; }
-    .side-panel { 
-        width: 100%; 
-        border-left: none; 
+    .side-panel {
+        width: 100%;
+        border-left: none;
         border-top: 1px solid var(--grey-15);
         max-height: 45vh;
     }
-    .top-bar { display: none; }
+    .top-bar {
+        padding: 8px 12px;
+    }
+    .band {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .band-title {
+        min-width: auto;
+    }
+    .band-text {
+        display: none;
+    }
+    .matrix-area {
+        padding: 12px 8px 8px 24px;
+    }
+    .lenses {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
 }
