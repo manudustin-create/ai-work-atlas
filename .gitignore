@@ -1,0 +1,6 @@
+# Materiali di lavoro (pesanti, non servono nel deploy)
+sources/
+*.pptx
+node_modules/
+package.json
+package-lock.json
