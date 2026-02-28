@@ -133,6 +133,24 @@ body {
 }
 .reset-btn:hover { border-color: var(--grey-30); color: var(--black); }
 
+.intro-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--grey-15);
+    color: var(--grey-50);
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.intro-btn:hover { border-color: var(--grey-30); color: var(--black); }
+
 /* View Switch */
 .view-switch {
     display: flex;
@@ -373,7 +391,10 @@ body {
     padding: 10px 8px 12px;
     border-bottom: 1px solid var(--black);
     text-align: left;
+    cursor: pointer;
+    transition: background 0.15s;
 }
+.col-head:hover { background: var(--grey-05); }
 
 .col-head h2 {
     font-family: 'Space Mono', monospace;
@@ -496,7 +517,10 @@ body {
     align-items: flex-start;
     justify-content: flex-start;
     gap: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
 }
+.row-head:hover { background: var(--grey-05); }
 
 .row-head h2 {
     font-family: 'Space Mono', monospace;

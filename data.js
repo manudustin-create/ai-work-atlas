@@ -37,12 +37,12 @@ var ROLE = {
 DATA.forEach(function(d) { d.role = ROLE[d.id] || null; });
 
 var COLS = [
-            {k:'Estrattiva',t:'Extractive',s:'datafying'},
-            {k:'Tool',t:'Tool',s:'assistive'},
-            {k:'Oracolo',t:'Oracle',s:'inferential'},
-            {k:'Mgmt',t:'Algorithmic Mgmt',s:'actuating'},
-            {k:'Visibilità',t:'Visibility',s:'reputational'},
-            {k:'OS',t:'Operating System',s:'infrastructural'}
+            {k:'Estrattiva',t:'Extractive',s:'datafying',desc:"L'AI come macchina di estrazione: converte attività umana in dati, tracce e micro-lavoro. Il valore viene catturato, reso proprietario e trasformato in asset — spesso senza che chi lo produce ne sia consapevole o ne benefici. La domanda chiave: chi estrae, chi è estratto, e chi ne trae vantaggio?"},
+            {k:'Tool',t:'Tool',s:'assistive',desc:"L'AI come strumento: potenzia l'output individuale, accelera task, abbassa l'attrito. La persona resta apparentemente al timone. Ma lo strumento non è neutro: ridefinisce cosa è facile e cosa è difficile, cosa si delega e cosa si smette di fare. La domanda chiave: augmentation o sostituzione silenziosa del giudizio?"},
+            {k:'Oracolo',t:'Oracle',s:'inferential',desc:"L'AI come autorità inferenziale: score, ranking, predizioni e label diventano base decisionale. Il modello produce output 'plausibili' che vengono trattati come verità. La domanda chiave: quando il plausibile diventa norma, chi può ancora contestare?"},
+            {k:'Mgmt',t:'Algorithmic Mgmt',s:'actuating',desc:"L'AI come sistema di governo: metriche, nudging, scheduling, routing e incentivi micro guidano il comportamento senza bisogno di gerarchia classica. Il controllo è nel design, non nel comando. La domanda chiave: chi decide ritmo, carico e criteri — e chi può opporsi?"},
+            {k:'Visibilità',t:'Visibility Director',s:'reputational',desc:"L'AI come regista della visibilità: algoritmi di esposizione, ranking reputazionali e metriche di engagement determinano chi è visto, chi è premiato e chi scompare. La visibilità diventa capitale e condizione di accesso. La domanda chiave: visibilità è valore, o ne è solo il surrogato?"},
+            {k:'OS',t:'Operating System',s:'infrastructural',desc:"L'AI come infrastruttura: non uno strumento che si usa, ma un ambiente in cui si opera. Default, workflow e regole del gioco sono incorporati nei sistemi — spesso poco visibili e poco contestabili. La domanda chiave: chi disegna i default, e chi può cambiarli?"}
         ];
 
 // Anthropological conception labels for Worker row (mapped by column key)
@@ -75,6 +75,15 @@ var ROW_SUB = {
     "Organization":"MESO",
     "Society":"MACRO"
 };
+
+var ROW_DESC = {
+    "Worker":"La persona al lavoro, nel rapporto quotidiano con l'AI. Qui si giocano le dinamiche individuali: come l'AI potenzia, estrae, valuta, governa, espone e pre-configura l'esperienza della singola persona. È il livello dove l'impatto si sente per primo — spesso prima di essere compreso.",
+    "HR":"La funzione che media tra persona e organizzazione. HR progetta i sistemi che governano le persone: formazione, selezione, performance, riconoscimento, accountability. Con l'AI, ogni funzione HR rischia un drift specifico — da trainer cosmetico a amplificatore acritico degli score. La domanda chiave: HR subisce i sistemi o li disegna?",
+    "Organization":"L'organizzazione come sistema: come cattura valore, adotta strumenti, istituzionalizza decisioni, coordina lavoro, governa la narrazione e disegna i propri processi. Ogni colonna descrive un archetipo organizzativo — un modo diverso in cui l'AI ridefinisce la forma dell'impresa.",
+    "Society":"Le dinamiche che trascendono la singola organizzazione: quando l'estrazione diventa colonialismo dei dati, la tecnica diventa norma sociale, i dati diventano verità, la sorveglianza diventa modello economico, la performance diventa dovere e gli algoritmi diventano infrastruttura. Ogni cella porta il nome di un archetipo societario e del suo autore di riferimento."
+};
+
+var INTRO_TEXT = "AI & Work Atlas è una cartografia critica di come l'intelligenza artificiale sta trasformando il lavoro. La mappa incrocia 4 livelli di osservazione (Worker, HR, Organization, Society) con 6 ruoli che l'AI assume (Extractive, Tool, Oracle, Algorithmic Management, Visibility Director, Operating System). Ogni cella descrive una dinamica specifica — con segnali, rischi e possibili presidi.\n\nIspirato al lavoro di Kate Crawford e Vladan Joler (Calculating Empires), questo atlante propone percorsi di lettura attraverso le tensioni tra persone, organizzazioni e sistemi algoritmici.\n\nClicca su una cella per approfondire. Clicca su un'intestazione di colonna o riga per capire cosa rappresenta.";
 
 var CELL_KWS = {
     "Worker": {

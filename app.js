@@ -47,6 +47,7 @@ function init() {
     buildMatrix();
     $('#search').addEventListener('input', filter);
     $('#reset').addEventListener('click', resetView);
+    $('#intro-btn').addEventListener('click', showIntro);
     $('#view-toggle').addEventListener('change', toggleView);
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideDetail(); });
     checkHash();
@@ -134,6 +135,7 @@ function buildMatrix() {
         var ch = document.createElement('div');
         ch.className = 'col-head';
         ch.innerHTML = '<h2>' + c.t + '</h2><p>' + c.s + '</p>';
+        ch.addEventListener('click', (function(col) { return function() { showColDetail(col.k); }; })(c));
         m.appendChild(ch);
     });
     
@@ -158,6 +160,7 @@ function buildMatrix() {
         var rh = document.createElement('div');
         rh.className = 'row-head';
         rh.innerHTML = '<h2>' + row + '</h2><span class="row-sub">' + (ROW_SUB[row] || '') + '</span>';
+        rh.addEventListener('click', (function(r) { return function() { showRowDetail(r); }; })(row));
         m.appendChild(rh);
         
         COLS.forEach(function(col) {
@@ -380,6 +383,196 @@ function hideDetail() {
     history.replaceState(null, '', location.pathname);
 }
 
+function showColDetail(colKey) {
+    var col = COLS.find(function(c) { return c.k === colKey; });
+    if (!col) return;
+    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
+    var pp = document.getElementById('panel-placeholder');
+    var pc = document.getElementById('panel-content');
+    pp.style.display = 'none';
+    pc.style.display = 'block';
+    pc.innerHTML = '';
+    history.replaceState(null, '', location.pathname + '#col-' + colKey);
+
+    var header = document.createElement('div');
+    header.className = 'panel-header';
+    var idEl = document.createElement('div');
+    idEl.className = 'panel-id';
+    idEl.textContent = '↕';
+    idEl.style.color = 'var(--grey-50)';
+    header.appendChild(idEl);
+    var nameEl = document.createElement('div');
+    nameEl.className = 'panel-name';
+    nameEl.textContent = col.t;
+    header.appendChild(nameEl);
+    var metaEl = document.createElement('div');
+    metaEl.className = 'panel-meta';
+    var tag = document.createElement('div');
+    tag.className = 'panel-tag';
+    tag.textContent = col.s;
+    metaEl.appendChild(tag);
+    header.appendChild(metaEl);
+    var closeA = document.createElement('a');
+    closeA.className = 'panel-close';
+    closeA.href = '#';
+    closeA.textContent = '✕ chiudi';
+    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
+    header.appendChild(closeA);
+    pc.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'panel-body';
+    if (col.desc) {
+        var sec = document.createElement('div');
+        sec.className = 'panel-section';
+        var h3 = document.createElement('h3');
+        h3.textContent = 'Descrizione';
+        sec.appendChild(h3);
+        var p = document.createElement('p');
+        p.textContent = col.desc;
+        sec.appendChild(p);
+        body.appendChild(sec);
+    }
+    var tiles = DATA.filter(function(d) { return d.role === colKey; });
+    if (tiles.length) {
+        var sec2 = document.createElement('div');
+        sec2.className = 'panel-section';
+        var h3b = document.createElement('h3');
+        h3b.textContent = 'Celle in questa colonna';
+        sec2.appendChild(h3b);
+        var ul = document.createElement('ul');
+        tiles.forEach(function(d) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = '#' + d.id;
+            a.textContent = d.layer + ' → ' + d.name;
+            a.addEventListener('click', function(e) { e.preventDefault(); showDetail(d.id); });
+            li.appendChild(a);
+            ul.appendChild(li);
+        });
+        sec2.appendChild(ul);
+        body.appendChild(sec2);
+    }
+    pc.appendChild(body);
+}
+
+function showRowDetail(rowName) {
+    var desc = ROW_DESC[rowName] || '';
+    var sub = ROW_SUB[rowName] || '';
+    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
+    var pp = document.getElementById('panel-placeholder');
+    var pc = document.getElementById('panel-content');
+    pp.style.display = 'none';
+    pc.style.display = 'block';
+    pc.innerHTML = '';
+    history.replaceState(null, '', location.pathname + '#row-' + rowName);
+
+    var header = document.createElement('div');
+    header.className = 'panel-header';
+    var idEl = document.createElement('div');
+    idEl.className = 'panel-id';
+    idEl.textContent = '↔';
+    idEl.style.color = 'var(--grey-50)';
+    header.appendChild(idEl);
+    var nameEl = document.createElement('div');
+    nameEl.className = 'panel-name';
+    nameEl.textContent = rowName;
+    header.appendChild(nameEl);
+    var metaEl = document.createElement('div');
+    metaEl.className = 'panel-meta';
+    var tag = document.createElement('div');
+    tag.className = 'panel-tag';
+    tag.textContent = sub;
+    metaEl.appendChild(tag);
+    header.appendChild(metaEl);
+    var closeA = document.createElement('a');
+    closeA.className = 'panel-close';
+    closeA.href = '#';
+    closeA.textContent = '✕ chiudi';
+    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
+    header.appendChild(closeA);
+    pc.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'panel-body';
+    if (desc) {
+        var sec = document.createElement('div');
+        sec.className = 'panel-section';
+        var h3 = document.createElement('h3');
+        h3.textContent = 'Descrizione';
+        sec.appendChild(h3);
+        var p = document.createElement('p');
+        p.textContent = desc;
+        sec.appendChild(p);
+        body.appendChild(sec);
+    }
+    var tiles = DATA.filter(function(d) { return d.layer === rowName; });
+    if (tiles.length) {
+        var sec2 = document.createElement('div');
+        sec2.className = 'panel-section';
+        var h3b = document.createElement('h3');
+        h3b.textContent = 'Celle in questa riga';
+        sec2.appendChild(h3b);
+        var ul = document.createElement('ul');
+        tiles.forEach(function(d) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = '#' + d.id;
+            a.textContent = (d.role || '') + ' → ' + d.name;
+            a.addEventListener('click', function(e) { e.preventDefault(); showDetail(d.id); });
+            li.appendChild(a);
+            ul.appendChild(li);
+        });
+        sec2.appendChild(ul);
+        body.appendChild(sec2);
+    }
+    pc.appendChild(body);
+}
+
+function showIntro() {
+    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
+    var pp = document.getElementById('panel-placeholder');
+    var pc = document.getElementById('panel-content');
+    pp.style.display = 'none';
+    pc.style.display = 'block';
+    pc.innerHTML = '';
+    history.replaceState(null, '', location.pathname + '#intro');
+
+    var header = document.createElement('div');
+    header.className = 'panel-header';
+    var idEl = document.createElement('div');
+    idEl.className = 'panel-id';
+    idEl.textContent = '◇';
+    idEl.style.color = 'var(--grey-50)';
+    header.appendChild(idEl);
+    var nameEl = document.createElement('div');
+    nameEl.className = 'panel-name';
+    nameEl.textContent = 'AI & Work Atlas';
+    header.appendChild(nameEl);
+    var closeA = document.createElement('a');
+    closeA.className = 'panel-close';
+    closeA.href = '#';
+    closeA.textContent = '✕ chiudi';
+    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
+    header.appendChild(closeA);
+    pc.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'panel-body';
+    var sec = document.createElement('div');
+    sec.className = 'panel-section';
+    var h3 = document.createElement('h3');
+    h3.textContent = 'Guida alla mappa';
+    sec.appendChild(h3);
+    INTRO_TEXT.split('\n\n').forEach(function(para) {
+        var p = document.createElement('p');
+        p.textContent = para;
+        sec.appendChild(p);
+    });
+    body.appendChild(sec);
+    pc.appendChild(body);
+}
+
 function resetView() {
     lens = null;
     $$('.lens').forEach(function(b) { b.classList.remove('active'); });
@@ -395,9 +588,12 @@ function resetView() {
 
 function checkHash() {
     var h = location.hash.slice(1);
-    if (h && DATA.find(function(d) { return d.id === h; })) {
+    if (!h) return;
+    if (h === 'intro') { showIntro(); return; }
+    if (h.indexOf('col-') === 0) { showColDetail(h.slice(4)); return; }
+    if (h.indexOf('row-') === 0) { showRowDetail(h.slice(4)); return; }
+    if (DATA.find(function(d) { return d.id === h; })) {
         showDetail(h);
-        // Scroll fino al tile corrispondente
         var tileEl = document.querySelector('.tile[data-id="' + h + '"]');
         if (tileEl) tileEl.scrollIntoView({behavior:'smooth', block:'center'});
     }
