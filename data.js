@@ -5,7 +5,8 @@ var DATA = [
     {id:"SIG",name:"Heteromated worker",family:"Extract",layer:"Worker",x:1,overlays:["EX"],definition:"L'interazione quotidiana diventa dato e micro-lavoro implicito: correzioni, scelte, feedback — la persona alimenta l'AI come filiera invisibile.",signals:["Interazioni convertite in training data","Feedback impliciti usati per ottimizzazione","Valore generato senza consapevolezza"],failure:"Asimmetria strutturale: la persona è necessaria ma invisibile, il valore estratto non è riconosciuto.",guardrail:"Minimizzazione, consenso, tracciabilità della filiera dati, riconoscimento del contributo.",sources:["Pasquinelli","Floridi"]},
     {id:"GWS",name:"Ghost worker",family:"Extract",layer:"Worker",x:1,overlays:["EX","K"],definition:"Lavoro umano invisibile (labeling, moderazione, micro-task) che rende possibile l'IA.",signals:["Piattaforme micro-task","Outsourcing data-labeling","Moderazione contenuti"],failure:"Invisibilità + precarizzazione (responsabilità scaricate a valle).",guardrail:"Trasparenza supply-chain + standard minimi + audit fornitori.",sources:["Gray&Suri","Ekbia","Taylor","Zuboff"]},
     {id:"CAP",name:"Cattura sapere",family:"Extract",layer:"Organization",x:1,overlays:["EX"],definition:"La cattura non è solo tecnica: è strategia. Standard, telemetria e interoperabilità determinano dipendenze, lock-in e capacità di governance. Ciò che è misurabile diventa governabile; ciò che non lo è rischia di sparire.",signals:["Data pipeline e telemetria come prerequisito","Piattaforme che impongono formati","Metriche come lingua comune dell'organizzazione"],failure:"Estrattivismo e asimmetria: l'organizzazione 'possiede' ciò che le persone generano.",guardrail:"Tracciabilità filiera + diritti su dati + limiti di riuso.",sources:["Pasquinelli","Zuboff"]},
-    {id:"GHO",name:"Data Colonialism",family:"Extract",layer:"Society",x:1,overlays:["EX","K"],definition:"La vita sociale è appropriata come risorsa: dati estratti, resi proprietari e convertiti in potere/valore, con asimmetrie tra chi 'raccoglie' e chi è raccolto.",signals:["Appropriazione dati come risorsa","Asimmetria raccolta/valore","Conversione vita sociale in rendita"],failure:"Estrattivismo sociale: chi produce dati non ne beneficia.",guardrail:"Sovranità dei dati, trasparenza filiera, riequilibrio del valore.",sources:["Couldry","Mejias"]},
+    {id:"BEC",name:"Risk Society",family:"Extract",layer:"Society",x:1,overlays:["EX","K"],definition:"La modernizzazione produce rischi sistemici strutturalmente invisibili: distribuiti, impossibili da attribuire, scaricati sulla singola persona. Non c'è welfare, non c'è rete — solo irresponsabilità organizzata. La persona che svolge ghost work porta il rischio da sola.",signals:["Rischi distribuiti e non attribuibili","Irresponsabilità organizzata","Assenza di welfare e tutele per chi è invisibile"],failure:"Individualizzazione del rischio: il sistema produce il danno, la persona lo subisce — senza strumenti per contestare.",guardrail:"Responsabilità istituzionale, tutele collettive, visibilità dei rischi sistemici.",sources:["Beck"]},
+    {id:"BAU",name:"Liquid Society",family:"Extract",layer:"Society",x:1,overlays:["EX"],definition:"I confini si dissolvono: tra lavoro e non-lavoro, tra uso e produzione, tra consumo e addestramento. Il prosumer è simultaneamente fruitore dell'AI e suo trainer — l'estrazione è così fluida da essere indistinguibile dalla normalità. Nessuna struttura stabile da contestare.",signals:["Confini lavoro/non-lavoro dissolti","Prosumer: utente e trainer insieme","Precarietà strutturale delle relazioni"],failure:"Fluidità come trappola: se tutto è liquido, nulla è contestabile — non ci sono confini da difendere.",guardrail:"Riconoscimento del contributo implicito, diritto alla disconnessione, confini espliciti tra uso e lavoro.",sources:["Bauman"]},
     {id:"ORA",name:"Sé valutato / Deferenza oracolare",family:"Judge",layer:"Worker",x:2,overlays:["S0","G"],definition:"Doppio movimento: la persona delega giudizio al modello, e il modello valuta la persona. Score, ranking e label diventano autorità cognitiva — ci si adatta al punteggio, si smette di contestare.",signals:["Decisioni mediate dal modello","Score e label che orientano accessi","Predizioni trattate come fatti"],failure:"Narcotizzazione tecnica: il plausibile diventa norma, l'identità si irrigidisce, la responsabilità evapora.",guardrail:"Contraddittorio strutturale: ricorso, override, tracciamento decisioni, spiegazioni comprensibili.",sources:["Floridi","Popper"]},
     {id:"SCO",name:"HR as Oracle Amplifier",family:"Judge",layer:"HR",x:2,overlays:["G","K"],definition:"Score e ranking orientano accessi a hiring, mobility e rewards. HR tratta l'output del modello come evidenza — il plausibile diventa criterio decisionale.",signals:["Screening automatizzato","Score di fit/potential come filtro","Ranking interni che orientano opportunità"],failure:"HR as Oracle Amplifier: tratta score come verità, delega decisioni al plausibile.",guardrail:"Audit + canali di ricorso + spiegazione sufficiente + rettifica + stop rule.",sources:["Ajunwa","Sandel"]},
     {id:"BIA",name:"Dataism",family:"Judge",layer:"Society",x:2,overlays:["G","S0"],definition:"I dati come fonte di verità 'oggettiva': l'algoritmo acquisisce autorità epistemica ('evidence-based'), anche quando misura e categorie sono scelte storiche.",signals:["Dati trattati come verità oggettiva","Autorità epistemica dell'algoritmo","Categorie storiche naturalizzate"],failure:"Sostituzione del giudizio con la metrica: ciò che non è misurabile scompare.",guardrail:"Contestabilità delle categorie, pluralità epistemica, trasparenza dei criteri.",sources:["Harari","van Dijck"]},
@@ -27,7 +28,8 @@ var DATA = [
 
 var ROLE = {
     AUG:'Tool',PRO:'Tool',LIT:'Tool',TEC:'Tool',
-    SIG:'Estrattiva',GWS:'Estrattiva',GHO:'Estrattiva',CAP:'Estrattiva',
+    GWS:'Occluded',BEC:'Occluded',
+    SIG:'Embedded',CAP:'Embedded',BAU:'Embedded',
     ORA:'Oracolo',SCO:'Oracolo',BIA:'Oracolo',SDB:'Oracolo',
     KPI:'Mgmt',ROU:'Mgmt',SUR:'Mgmt',QWK:'Mgmt',
     VIS:'Visibilità',ATT:'Visibilità',REP:'Visibilità',HRM:'Visibilità',
@@ -37,7 +39,8 @@ var ROLE = {
 DATA.forEach(function(d) { d.role = ROLE[d.id] || null; });
 
 var COLS = [
-            {k:'Estrattiva',t:'Extractive',s:'datafying',desc:"L'AI come macchina di estrazione: converte attività umana in dati, tracce e micro-lavoro. Il valore viene catturato, reso proprietario e trasformato in asset — spesso senza che chi lo produce ne sia consapevole o ne benefici. La domanda chiave: chi estrae, chi è estratto, e chi ne trae vantaggio?"},
+            {k:'Occluded',t:'Occluded',s:'structural invisibility',group:'Extractive',desc:"Invisibilità strutturale: il lavoro esiste ma è deliberatamente nascosto, negato, frammentato. Chi lo svolge è necessario ma fuori scena — labeling, moderazione, micro-task che rendono possibile l'AI. Il rischio ricade sulla singola persona senza rete né riconoscimento. La domanda chiave: chi è invisibile, e a chi conviene che lo resti?"},
+            {k:'Embedded',t:'Embedded',s:'processual invisibility',group:'Extractive',desc:"Invisibilità processuale: l'estrazione avviene così fluidamente da essere indistinguibile dall'uso. La persona è simultaneamente utente e trainer, consumatore e produttore — il confine tra lavoro e non-lavoro si dissolve. La domanda chiave: se non sai di lavorare, puoi contestare le condizioni?"},
             {k:'Tool',t:'Tool',s:'assistive',desc:"L'AI come strumento: potenzia l'output individuale, accelera task, abbassa l'attrito. La persona resta apparentemente al timone. Ma lo strumento non è neutro: ridefinisce cosa è facile e cosa è difficile, cosa si delega e cosa si smette di fare. La domanda chiave: augmentation o sostituzione silenziosa del giudizio?"},
             {k:'Oracolo',t:'Oracle',s:'inferential',desc:"L'AI come autorità inferenziale: score, ranking, predizioni e label diventano base decisionale. Il modello produce output 'plausibili' che vengono trattati come verità. La domanda chiave: quando il plausibile diventa norma, chi può ancora contestare?"},
             {k:'Mgmt',t:'Algorithmic Mgmt',s:'actuating',desc:"L'AI come sistema di governo: metriche, nudging, scheduling, routing e incentivi micro guidano il comportamento senza bisogno di gerarchia classica. Il controllo è nel design, non nel comando. La domanda chiave: chi decide ritmo, carico e criteri — e chi può opporsi?"},
@@ -47,7 +50,8 @@ var COLS = [
 
 // Anthropological conception labels for Worker row (mapped by column key)
 var ANTHRO_LABELS = {
-    'Estrattiva': 'Heteromated / Ghost',
+    'Occluded': 'Ghost',
+    'Embedded': 'Heteromated',
     'Tool': 'Augmented',
     'Oracolo': 'Antiquato / Idiota',
     'Mgmt': 'Quantified',
@@ -56,7 +60,8 @@ var ANTHRO_LABELS = {
 };
 
 var INFORG_TRIADS = {
-    'Estrattiva': { id:'captured',   ag:'heteromated',    ct:'opaque' },
+    'Occluded':   { id:'invisible',  ag:'occluded',       ct:'denied' },
+    'Embedded':   { id:'captured',   ag:'heteromated',    ct:'opaque' },
     'Tool':       { id:'assisted',   ag:'augmented',      ct:'user-controlled' },
     'Oracolo':    { id:'antiquated',  ag:'delegated',      ct:'forfeited' },
     'Mgmt':       { id:'measured',   ag:'constrained',    ct:'procedural' },
@@ -83,7 +88,7 @@ var ROW_DESC = {
     "Society":"Le dinamiche che trascendono la singola organizzazione: quando l'estrazione diventa colonialismo dei dati, la tecnica diventa norma sociale, i dati diventano verità, la sorveglianza diventa modello economico, la performance diventa dovere e gli algoritmi diventano infrastruttura. Ogni cella porta il nome di un archetipo societario e del suo autore di riferimento."
 };
 
-var INTRO_TEXT = "AI & Work Atlas è una cartografia critica di come l'intelligenza artificiale sta trasformando il lavoro. La mappa incrocia 4 livelli di osservazione (Worker, HR, Organization, Society) con 6 ruoli che l'AI assume (Extractive, Tool, Oracle, Algorithmic Management, Visibility Director, Operating System). Ogni cella descrive una dinamica specifica — con segnali, rischi e possibili presidi.\n\nIspirato al lavoro di Kate Crawford e Vladan Joler (Calculating Empires), questo atlante propone percorsi di lettura attraverso le tensioni tra persone, organizzazioni e sistemi algoritmici.\n\nClicca su una cella per approfondire. Clicca su un'intestazione di colonna o riga per capire cosa rappresenta.";
+var INTRO_TEXT = "AI & Work Atlas è una cartografia critica di come l'intelligenza artificiale sta trasformando il lavoro. La mappa incrocia 4 livelli di osservazione (Worker, HR, Organization, Society) con 7 ruoli che l'AI assume — di cui due forme di invisibilità estrattiva (Occluded, Embedded), più Tool, Oracle, Algorithmic Management, Visibility Director e Operating System. Ogni cella descrive una dinamica specifica — con segnali, rischi e possibili presidi.\n\nIspirato al lavoro di Kate Crawford e Vladan Joler (Calculating Empires), questo atlante propone percorsi di lettura attraverso le tensioni tra persone, organizzazioni e sistemi algoritmici.\n\nClicca su una cella per approfondire. Clicca su un'intestazione di colonna o riga per capire cosa rappresenta.";
 
 var TOURS = [
     {
@@ -155,32 +160,36 @@ var TOURS = [
 
 var CELL_KWS = {
     "Worker": {
+        "Occluded": "Lavoro invisibile · labeling · moderazione · micro-task",
+        "Embedded": "Segnali · tracce · training data · estrazione implicita",
         "Tool": "Output↑ locale · delega sintesi/memoria · agency?",
-        "Estrattiva": "Segnali · tracce · training data (heteromated/ghost)",
         "Mgmt": "score · target · nudging · scheduling · telemetry",
         "Visibilità": "Visibilità · attenzione · auto-brand",
         "Oracolo": "Autorità cognitiva · delega giudizio · narcotizzazione · deresponsabilizzazione",
         "OS": "Ambiente pre-configurato · default · opzioni vincolate · eterodirezione soft"
     },
     "HR": {
+        "Occluded": "— (da definire)",
+        "Embedded": "— (da definire)",
         "Tool": "Training trap · adozione cosmetica · formazione senza redesign",
-        "Estrattiva": "— (da definire)",
         "Mgmt": "Behavioral governor · dashboard · nudging · incentivi micro",
         "Visibilità": "Reputation manager · engagement theatre · visibilità come proxy",
         "Oracolo": "Oracle amplifier · score come verità · delega al plausibile",
         "OS": "Operating model architect · decision rights · confine umano/AI"
     },
     "Organization": {
+        "Occluded": "— (da definire)",
+        "Embedded": "Datafication · telemetria · standard · lock-in",
         "Tool": "Produttività a isole · bolt-on · shadow AI · frammentazione",
-        "Estrattiva": "Datafication · telemetria · standard · lock-in",
         "Mgmt": "Routing · allocazione · scheduling · potere logistico",
         "Visibilità": "Narrazione · hype · sensemaking · storytelling",
         "Oracolo": "Score · decision support · alibi algoritmico · deferenza",
         "OS": "Coordination · workflow elimination · AI-native · decision rights"
     },
     "Society": {
+        "Occluded": "Risk society · rischio individualizzato · irresponsabilità organizzata",
+        "Embedded": "Liquid society · confini dissolti · prosumer · precarietà",
         "Tool": "Tecnica come norma · efficienza → fini · ottimizzazione",
-        "Estrattiva": "Data colonialism · appropriazione · asimmetria",
         "Mgmt": "Surveillance capitalism · tracciamento · predizione · rendita",
         "Visibilità": "Performance society · auto-ottimizzazione · visibilità come dovere",
         "Oracolo": "Dataism · autorità epistemica · verità algoritmica",
@@ -190,9 +199,11 @@ var CELL_KWS = {
 
 var CELL_EMPTY = {
     "HR": {
-        "Estrattiva": "da definire — dinamiche estrattive HR in esplorazione"
+        "Occluded": "da definire",
+        "Embedded": "da definire"
     },
     "Organization": {
+        "Occluded": "da definire"
     },
     "Society": {
     }
@@ -203,7 +214,7 @@ var CELL_EMPTY = {
 var CELL_IMAGES = {
     "Worker": {
         "Tool": "assets/img/worker-tool.png",
-        "Estrattiva": "assets/worker_extract.jpg",
+        "Embedded": "assets/worker_extract.jpg",
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
     },
@@ -213,13 +224,13 @@ var CELL_IMAGES = {
     },
     "Organization": {
         "Tool": "assets/org_tool.jpg",
-        "Estrattiva": "assets/org_extract.jpg",
+        "Embedded": "assets/org_extract.jpg",
         "Mgmt": "assets/org_mgmt.jpg",
         "Visibilità": "assets/org_visibility.jpg",
         "OS": "assets/org_os.jpg"
     },
     "Society": {
-        "Estrattiva": "assets/society_extract.jpg",
+        "Occluded": "assets/society_extract.jpg",
         "Oracolo": "assets/society_oracle.jpg",
         "Mgmt": "assets/img/society-mgmt.jpg",
         "Visibilità": "assets/img/society-visibilita.png",

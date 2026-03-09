@@ -136,8 +136,11 @@ function buildMatrix() {
     
     COLS.forEach(function(c) {
         var ch = document.createElement('div');
-        ch.className = 'col-head';
-        ch.innerHTML = '<h2>' + c.t + '</h2><p>' + c.s + '</p>';
+        ch.className = 'col-head' + (c.group ? ' col-grouped' : '');
+        var html = '';
+        if (c.group) html += '<span class="col-group-label">' + c.group + '</span>';
+        html += '<h2>' + c.t + '</h2><p>' + c.s + '</p>';
+        ch.innerHTML = html;
         ch.addEventListener('click', (function(col) { return function() { showColDetail(col.k); }; })(c));
         m.appendChild(ch);
     });
@@ -410,6 +413,15 @@ function showColDetail(colKey) {
     header.appendChild(nameEl);
     var metaEl = document.createElement('div');
     metaEl.className = 'panel-meta';
+    if (col.group) {
+        var groupTag = document.createElement('div');
+        groupTag.className = 'panel-tag';
+        groupTag.textContent = 'Gruppo: ';
+        var groupSpan = document.createElement('span');
+        groupSpan.textContent = col.group;
+        groupTag.appendChild(groupSpan);
+        metaEl.appendChild(groupTag);
+    }
     var tag = document.createElement('div');
     tag.className = 'panel-tag';
     tag.textContent = col.s;

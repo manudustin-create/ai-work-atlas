@@ -396,6 +396,17 @@ body {
 }
 .col-head:hover { background: var(--grey-05); }
 
+.col-group-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--c-extract);
+    display: block;
+    margin-bottom: 2px;
+}
+
 .col-head h2 {
     font-family: 'Space Mono', monospace;
     font-size: 0.7rem;
