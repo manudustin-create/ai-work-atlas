@@ -6,6 +6,7 @@ var DATA = [
     {id:"GWS",name:"Ghost worker",family:"Extract",layer:"Worker",x:1,overlays:["EX","K"],definition:"Lavoro umano invisibile (labeling, moderazione, micro-task) che rende possibile l'IA.",signals:["Piattaforme micro-task","Outsourcing data-labeling","Moderazione contenuti"],failure:"Invisibilità + precarizzazione (responsabilità scaricate a valle).",guardrail:"Trasparenza supply-chain + standard minimi + audit fornitori.",sources:["Gray&Suri","Ekbia","Taylor","Zuboff"]},
     {id:"ABF",name:"HR as Absent Function",family:"Extract",layer:"HR",x:1,overlays:["EX","K"],definition:"La dinamica più strutturalmente invisibile del ghost work: non c'è HR. Nessuno negozia condizioni, nessuno tutela diritti, nessuno rappresenta interessi. L'assenza della funzione people non è un'omissione — è l'architettura del sistema. Dove il lavoro è più precario, HR è più assente.",signals:["Nessuna funzione HR per ghost worker e micro-tasker","Condizioni di lavoro non governate","Assenza di rappresentanza, tutele, sviluppo"],failure:"HR as Absent Function: l'assenza di governance è il meccanismo dell'occlusione — chi è invisibile non ha nessuno che lo renda visibile.",guardrail:"Estensione della responsabilità HR alla supply chain AI · Standard minimi · Riconoscimento istituzionale del lavoro invisibile.",sources:["Gray&Suri","Beck"]},
     {id:"TAX",name:"HR as Labor Taxonomist",family:"Extract",layer:"HR",x:1,overlays:["EX"],definition:"HR classifica il lavoro: dipendente, collaboratore, stagista, fornitore, utente. Ogni categoria determina visibilità, diritti e protezioni. Con l'AI, la classificazione diventa meccanismo di occlusione: chi corregge output è 'utente che dà feedback' o 'persona che addestra il sistema'? La tassonomia HR crea l'invisibilità — ciò che non ha una categoria non esiste.",signals:["Nuove forme di lavoro non classificate (prompt curation, data hygiene, AI correction)","Contributi impliciti non riconosciuti nei job profile","Gap tra ciò che le persone fanno e ciò che il ruolo descrive"],failure:"HR as Labor Taxonomist: le categorie esistenti non catturano il lavoro reale — il non-classificato diventa invisibile.",guardrail:"Revisione continua delle tassonomie · Riconoscimento esplicito del lavoro AI-related · Job architecture che include contributi impliciti.",sources:["Ekbia","Casilli"]},
+    {id:"LOO",name:"Layered Outsourcing Organization",family:"Extract",layer:"Organization",x:1,overlays:["EX","K"],definition:"L'organizzazione frammenta la forza lavoro attraverso strati di outsourcing, subappalto e piattaforme. L'impresa lead beneficia del lavoro ma non lo impiega, non lo vede, non lo governa. Ogni strato di intermediazione aggiunge distanza e riduce responsabilità — il lavoro invisibile è a valle, il valore è a monte.",signals:["Catene di subappalto multi-livello","Esternalizzazione sistematica del lavoro AI (labeling, moderazione, annotazione)","Nessuna visibilità sulle condizioni a valle"],failure:"L'organizzazione cattura il valore del lavoro invisibile senza portarne il costo — responsabilità diluita per design.",guardrail:"Trasparenza sulla supply chain del lavoro · Standard minimi per subappaltatori · Responsabilità solidale.",sources:["Weil","Gray&Suri"]},
     {id:"CAP",name:"Cattura sapere",family:"Extract",layer:"Organization",x:1,overlays:["EX"],definition:"La cattura non è solo tecnica: è strategia. Standard, telemetria e interoperabilità determinano dipendenze, lock-in e capacità di governance. Ciò che è misurabile diventa governabile; ciò che non lo è rischia di sparire.",signals:["Data pipeline e telemetria come prerequisito","Piattaforme che impongono formati","Metriche come lingua comune dell'organizzazione"],failure:"Estrattivismo e asimmetria: l'organizzazione 'possiede' ciò che le persone generano.",guardrail:"Tracciabilità filiera + diritti su dati + limiti di riuso.",sources:["Pasquinelli","Zuboff"]},
     {id:"BEC",name:"Risk Society",family:"Extract",layer:"Society",x:1,overlays:["EX","K"],definition:"La modernizzazione produce rischi sistemici strutturalmente invisibili: distribuiti, impossibili da attribuire, scaricati sulla singola persona. Non c'è welfare, non c'è rete — solo irresponsabilità organizzata. La persona che svolge ghost work porta il rischio da sola.",signals:["Rischi distribuiti e non attribuibili","Irresponsabilità organizzata","Assenza di welfare e tutele per chi è invisibile"],failure:"Individualizzazione del rischio: il sistema produce il danno, la persona lo subisce — senza strumenti per contestare.",guardrail:"Responsabilità istituzionale, tutele collettive, visibilità dei rischi sistemici.",sources:["Beck"]},
     {id:"BAU",name:"Liquid Society",family:"Extract",layer:"Society",x:1,overlays:["EX"],definition:"I confini si dissolvono: tra lavoro e non-lavoro, tra uso e produzione, tra consumo e addestramento. Il prosumer è simultaneamente fruitore dell'AI e suo trainer — l'estrazione è così fluida da essere indistinguibile dalla normalità. Nessuna struttura stabile da contestare.",signals:["Confini lavoro/non-lavoro dissolti","Prosumer: utente e trainer insieme","Precarietà strutturale delle relazioni"],failure:"Fluidità come trappola: se tutto è liquido, nulla è contestabile — non ci sono confini da difendere.",guardrail:"Riconoscimento del contributo implicito, diritto alla disconnessione, confini espliciti tra uso e lavoro.",sources:["Bauman"]},
@@ -30,7 +31,7 @@ var DATA = [
 
 var ROLE = {
     AUG:'Tool',PRO:'Tool',LIT:'Tool',TEC:'Tool',
-    GWS:'Occluded',ABF:'Occluded',BEC:'Occluded',
+    GWS:'Occluded',ABF:'Occluded',LOO:'Occluded',BEC:'Occluded',
     SIG:'Embedded',TAX:'Embedded',CAP:'Embedded',BAU:'Embedded',
     ORA:'Oracolo',SCO:'Oracolo',BIA:'Oracolo',SDB:'Oracolo',
     KPI:'Mgmt',ROU:'Mgmt',SUR:'Mgmt',QWK:'Mgmt',
@@ -180,7 +181,7 @@ var CELL_KWS = {
         "OS": "Operating model architect · decision rights · confine umano/AI"
     },
     "Organization": {
-        "Occluded": "— (da definire)",
+        "Occluded": "Outsourcing a strati · subappalto · lavoro invisibile a valle",
         "Embedded": "Datafication · telemetria · standard · lock-in",
         "Tool": "Produttività a isole · bolt-on · shadow AI · frammentazione",
         "Mgmt": "Routing · allocazione · scheduling · potere logistico",
@@ -203,7 +204,6 @@ var CELL_EMPTY = {
     "HR": {
     },
     "Organization": {
-        "Occluded": "da definire"
     },
     "Society": {
     }
