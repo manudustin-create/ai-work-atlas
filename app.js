@@ -1,6 +1,8 @@
 var _DATA_OK = typeof DATA !== 'undefined' && typeof COLS !== 'undefined';
 if (!_DATA_OK) console.error('[AI&Work Atlas] data.js non caricato!');
 var lens = null;
+var activeTour = null;
+var activeTourStep = 0;
 
 var OV_SVG = {
     S0: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10 A8 8 0 0 1 20 10"/><line x1="12" y1="10" x2="12" y2="18"/><circle cx="12" cy="20" r="2"/></svg>',
@@ -48,6 +50,7 @@ function init() {
     $('#search').addEventListener('input', filter);
     $('#reset').addEventListener('click', resetView);
     $('#intro-btn').addEventListener('click', showIntro);
+    $('#tour-btn').addEventListener('click', showTourList);
     $('#view-toggle').addEventListener('change', toggleView);
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideDetail(); });
     checkHash();
@@ -573,8 +576,289 @@ function showIntro() {
     pc.appendChild(body);
 }
 
+function showTourList() {
+    endTour();
+    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
+    var pp = document.getElementById('panel-placeholder');
+    var pc = document.getElementById('panel-content');
+    pp.style.display = 'none';
+    pc.style.display = 'block';
+    pc.innerHTML = '';
+    history.replaceState(null, '', location.pathname + '#tours');
+
+    var header = document.createElement('div');
+    header.className = 'panel-header';
+    var idEl = document.createElement('div');
+    idEl.className = 'panel-id';
+    idEl.textContent = '⟡';
+    idEl.style.color = 'var(--accent)';
+    header.appendChild(idEl);
+    var nameEl = document.createElement('div');
+    nameEl.className = 'panel-name';
+    nameEl.textContent = 'Percorsi guidati';
+    header.appendChild(nameEl);
+    var closeA = document.createElement('a');
+    closeA.className = 'panel-close';
+    closeA.href = '#';
+    closeA.textContent = '✕ chiudi';
+    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
+    header.appendChild(closeA);
+    pc.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'panel-body';
+    var sec = document.createElement('div');
+    sec.className = 'panel-section';
+    var h3 = document.createElement('h3');
+    h3.textContent = 'Scegli un percorso';
+    sec.appendChild(h3);
+    var intro = document.createElement('p');
+    intro.textContent = 'Quattro percorsi di lettura attraverso la mappa. Ogni percorso collega celle diverse con testi che ne illuminano le connessioni.';
+    sec.appendChild(intro);
+    body.appendChild(sec);
+
+    TOURS.forEach(function(tour, i) {
+        var card = document.createElement('div');
+        card.className = 'tour-card';
+        var title = document.createElement('div');
+        title.className = 'tour-card-title';
+        title.textContent = tour.title;
+        card.appendChild(title);
+        var sub = document.createElement('div');
+        sub.className = 'tour-card-sub';
+        sub.textContent = tour.subtitle;
+        card.appendChild(sub);
+        var steps = document.createElement('div');
+        steps.className = 'tour-card-steps';
+        steps.textContent = tour.steps.length + ' tappe';
+        card.appendChild(steps);
+        card.addEventListener('click', (function(idx) { return function() { startTour(idx); }; })(i));
+        body.appendChild(card);
+    });
+
+    pc.appendChild(body);
+}
+
+function startTour(tourIndex) {
+    activeTour = tourIndex;
+    activeTourStep = 0;
+    showTourStep();
+}
+
+function showTourStep() {
+    if (activeTour === null) return;
+    var tour = TOURS[activeTour];
+    if (!tour) return;
+    var isClosing = activeTourStep >= tour.steps.length;
+    var step = isClosing ? null : tour.steps[activeTourStep];
+    var item = step ? DATA.find(function(d) { return d.id === step.tile; }) : null;
+
+    // Evidenzia tile nella matrice
+    var tourTileIds = tour.steps.map(function(s) { return s.tile; });
+    $$('.tile').forEach(function(t) {
+        t.classList.remove('active', 'tour-active', 'tour-path');
+        if (tourTileIds.indexOf(t.dataset.id) !== -1) {
+            if (!isClosing && t.dataset.id === step.tile) {
+                t.classList.add('tour-active');
+            } else {
+                t.classList.add('tour-path');
+            }
+        }
+    });
+
+    // Scroll alla tile corrente
+    if (!isClosing && step) {
+        var tileEl = document.querySelector('.tile[data-id="' + step.tile + '"]');
+        if (tileEl) tileEl.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    // Deep link
+    if (isClosing) {
+        history.replaceState(null, '', location.pathname + '#tour-' + tour.id + '-end');
+    } else {
+        history.replaceState(null, '', location.pathname + '#tour-' + tour.id + '-' + activeTourStep);
+    }
+
+    // Popola side panel
+    var pp = document.getElementById('panel-placeholder');
+    var pc = document.getElementById('panel-content');
+    pp.style.display = 'none';
+    pc.style.display = 'block';
+    pc.innerHTML = '';
+
+    // Header percorso
+    var header = document.createElement('div');
+    header.className = 'panel-header';
+    var idEl = document.createElement('div');
+    idEl.className = 'panel-id';
+    idEl.textContent = '⟡';
+    idEl.style.color = 'var(--accent)';
+    header.appendChild(idEl);
+    var nameEl = document.createElement('div');
+    nameEl.className = 'panel-name';
+    nameEl.textContent = tour.title;
+    header.appendChild(nameEl);
+    var metaEl = document.createElement('div');
+    metaEl.className = 'panel-meta';
+    var indicator = document.createElement('div');
+    indicator.className = 'panel-tag';
+    if (isClosing) {
+        indicator.textContent = 'Chiusura';
+    } else {
+        indicator.textContent = 'Tappa ' + (activeTourStep + 1) + ' di ' + tour.steps.length;
+    }
+    metaEl.appendChild(indicator);
+    header.appendChild(metaEl);
+    var closeA = document.createElement('a');
+    closeA.className = 'panel-close';
+    closeA.href = '#';
+    closeA.textContent = '✕ esci dal percorso';
+    closeA.addEventListener('click', function(e) { e.preventDefault(); endTour(); hideDetail(); });
+    header.appendChild(closeA);
+    pc.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'panel-body';
+
+    if (isClosing) {
+        // Testo di chiusura
+        var closingSec = document.createElement('div');
+        closingSec.className = 'panel-section';
+        var ch3 = document.createElement('h3');
+        ch3.textContent = 'Chiusura';
+        closingSec.appendChild(ch3);
+        var cp = document.createElement('div');
+        cp.className = 'tour-connective';
+        cp.textContent = tour.closing;
+        closingSec.appendChild(cp);
+        body.appendChild(closingSec);
+    } else {
+        // Testo connettivo
+        if (step.text) {
+            var connSec = document.createElement('div');
+            connSec.className = 'panel-section';
+            var connH3 = document.createElement('h3');
+            connH3.textContent = activeTourStep === 0 ? 'Introduzione' : 'Connessione';
+            connSec.appendChild(connH3);
+            var connP = document.createElement('div');
+            connP.className = 'tour-connective';
+            connP.textContent = step.text;
+            connSec.appendChild(connP);
+            body.appendChild(connSec);
+        }
+
+        // Contenuto tile (come showDetail ma inline)
+        if (item) {
+            var FAMILY_COLOR = {
+                Augment:'--c-augment', Govern:'--c-govern', Meaning:'--c-meaning',
+                Extract:'--c-extract', Judge:'--c-judge', Architect:'--c-architect'
+            };
+
+            var tileSec = document.createElement('div');
+            tileSec.className = 'panel-section';
+            var tileH3 = document.createElement('h3');
+            tileH3.textContent = item.name;
+            tileH3.style.color = 'var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')';
+            tileH3.style.fontSize = '0.72rem';
+            tileH3.style.textTransform = 'none';
+            tileH3.style.fontWeight = '500';
+            tileSec.appendChild(tileH3);
+            var defP = document.createElement('p');
+            defP.textContent = item.definition;
+            tileSec.appendChild(defP);
+            body.appendChild(tileSec);
+
+            var sigSec = document.createElement('div');
+            sigSec.className = 'panel-section';
+            var sigH3 = document.createElement('h3');
+            sigH3.textContent = 'Segnali';
+            sigSec.appendChild(sigH3);
+            var ul = document.createElement('ul');
+            item.signals.forEach(function(s) {
+                var li = document.createElement('li');
+                li.textContent = s;
+                ul.appendChild(li);
+            });
+            sigSec.appendChild(ul);
+            body.appendChild(sigSec);
+
+            var failSec = document.createElement('div');
+            failSec.className = 'panel-section';
+            var failH3 = document.createElement('h3');
+            failH3.textContent = 'Failure mode';
+            failSec.appendChild(failH3);
+            var failDiv = document.createElement('div');
+            failDiv.className = 'panel-callout failure';
+            failDiv.textContent = item.failure;
+            failSec.appendChild(failDiv);
+            body.appendChild(failSec);
+
+            var guardSec = document.createElement('div');
+            guardSec.className = 'panel-section';
+            var guardH3 = document.createElement('h3');
+            guardH3.textContent = 'Guardrail';
+            guardSec.appendChild(guardH3);
+            var guardDiv = document.createElement('div');
+            guardDiv.className = 'panel-callout guardrail';
+            guardDiv.textContent = item.guardrail;
+            guardSec.appendChild(guardDiv);
+            body.appendChild(guardSec);
+        }
+    }
+
+    // Navigazione
+    var nav = document.createElement('div');
+    nav.className = 'tour-nav';
+
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'tour-nav-btn';
+    if (activeTourStep === 0) {
+        prevBtn.textContent = '← Percorsi';
+        prevBtn.addEventListener('click', function() { endTour(); showTourList(); });
+    } else {
+        prevBtn.textContent = '← Indietro';
+        prevBtn.addEventListener('click', function() { activeTourStep--; showTourStep(); });
+    }
+    nav.appendChild(prevBtn);
+
+    var stepIndicator = document.createElement('span');
+    stepIndicator.className = 'tour-step-indicator';
+    if (isClosing) {
+        stepIndicator.textContent = '✓';
+    } else {
+        stepIndicator.textContent = (activeTourStep + 1) + ' / ' + tour.steps.length;
+    }
+    nav.appendChild(stepIndicator);
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'tour-nav-btn';
+    if (isClosing) {
+        nextBtn.textContent = 'Percorsi →';
+        nextBtn.addEventListener('click', function() { endTour(); showTourList(); });
+    } else if (activeTourStep === tour.steps.length - 1) {
+        nextBtn.textContent = 'Chiusura →';
+        nextBtn.addEventListener('click', function() { activeTourStep++; showTourStep(); });
+    } else {
+        nextBtn.textContent = 'Avanti →';
+        nextBtn.addEventListener('click', function() { activeTourStep++; showTourStep(); });
+    }
+    nav.appendChild(nextBtn);
+
+    body.appendChild(nav);
+    pc.appendChild(body);
+}
+
+function endTour() {
+    activeTour = null;
+    activeTourStep = 0;
+    $$('.tile').forEach(function(t) {
+        t.classList.remove('tour-active', 'tour-path');
+    });
+}
+
 function resetView() {
     lens = null;
+    endTour();
     $$('.lens').forEach(function(b) { b.classList.remove('active'); });
     $('#matrix').classList.remove('show-s0', 'show-ex', 'view-images');
     $('#view-toggle').checked = false;
@@ -590,6 +874,22 @@ function checkHash() {
     var h = location.hash.slice(1);
     if (!h) return;
     if (h === 'intro') { showIntro(); return; }
+    if (h === 'tours') { showTourList(); return; }
+    if (h.indexOf('tour-') === 0) {
+        var parts = h.slice(5);
+        var lastDash = parts.lastIndexOf('-');
+        if (lastDash !== -1) {
+            var tourId = parts.slice(0, lastDash);
+            var stepPart = parts.slice(lastDash + 1);
+            var tourIdx = TOURS.findIndex(function(t) { return t.id === tourId; });
+            if (tourIdx !== -1) {
+                activeTour = tourIdx;
+                activeTourStep = stepPart === 'end' ? TOURS[tourIdx].steps.length : parseInt(stepPart, 10) || 0;
+                showTourStep();
+                return;
+            }
+        }
+    }
     if (h.indexOf('col-') === 0) { showColDetail(h.slice(4)); return; }
     if (h.indexOf('row-') === 0) { showRowDetail(h.slice(4)); return; }
     if (DATA.find(function(d) { return d.id === h; })) {

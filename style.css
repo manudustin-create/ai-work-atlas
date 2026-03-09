@@ -954,6 +954,110 @@ body {
     color: var(--grey-70);
 }
 
+/* ═══════════════════════════════════════
+   TOUR
+═══════════════════════════════════════ */
+.tour-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    height: 26px;
+    padding: 0 8px;
+    background: transparent;
+    border: 1px solid var(--grey-15);
+    color: var(--grey-50);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+.tour-btn:hover { border-color: var(--grey-30); color: var(--black); }
+
+.tile.tour-active {
+    background: var(--accent-bg);
+    border-left-color: var(--accent) !important;
+}
+
+.tile.tour-path {
+    background: rgba(184, 134, 11, 0.04);
+    border-left-color: rgba(184, 134, 11, 0.3) !important;
+}
+
+.tour-card {
+    padding: 12px;
+    border: 1px solid var(--grey-15);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 8px;
+}
+.tour-card:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+}
+
+.tour-card-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--black);
+    margin-bottom: 4px;
+}
+
+.tour-card-sub {
+    font-size: 0.7rem;
+    color: var(--grey-70);
+    line-height: 1.35;
+    margin-bottom: 6px;
+}
+
+.tour-card-steps {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--grey-50);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.tour-connective {
+    padding: 12px;
+    background: var(--grey-05);
+    border-left: 2px solid var(--accent);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--grey-70);
+}
+
+.tour-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--grey-15);
+}
+
+.tour-nav-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--grey-15);
+    color: var(--grey-70);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.tour-nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-bg);
+}
+
+.tour-step-indicator {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--grey-50);
+}
+
 /* Background effects for lens */
 .matrix.show-s0 .cell[data-has-s0="true"] .cell-front { background: rgba(61, 90, 128, 0.06); }
 .matrix.show-ex .cell[data-has-ex="true"] .cell-front { background: rgba(90, 99, 64, 0.06); }

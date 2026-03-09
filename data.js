@@ -85,6 +85,74 @@ var ROW_DESC = {
 
 var INTRO_TEXT = "AI & Work Atlas è una cartografia critica di come l'intelligenza artificiale sta trasformando il lavoro. La mappa incrocia 4 livelli di osservazione (Worker, HR, Organization, Society) con 6 ruoli che l'AI assume (Extractive, Tool, Oracle, Algorithmic Management, Visibility Director, Operating System). Ogni cella descrive una dinamica specifica — con segnali, rischi e possibili presidi.\n\nIspirato al lavoro di Kate Crawford e Vladan Joler (Calculating Empires), questo atlante propone percorsi di lettura attraverso le tensioni tra persone, organizzazioni e sistemi algoritmici.\n\nClicca su una cella per approfondire. Clicca su un'intestazione di colonna o riga per capire cosa rappresenta.";
 
+var TOURS = [
+    {
+        id: 'extraction',
+        title: 'La catena dell\'estrazione',
+        subtitle: 'Dalla persona alla società: come il valore viene catturato',
+        steps: [
+            {tile:'SIG', text:'Questo percorso segue il filo dell\'estrazione dal basso verso l\'alto: dalla persona che alimenta l\'AI senza saperlo, fino alla società in cui i dati diventano risorsa coloniale. A ogni livello, qualcuno produce valore — e qualcun altro lo cattura.'},
+            {tile:'GWS', text:'Se ogni interazione è una traccia, chi la raccoglie? Dietro i modelli che usiamo c\'è un lavoro umano invisibile — labeling, moderazione, micro-task — che rende possibile l\'intelligenza artificiale ma che resta fuori scena.'},
+            {tile:'CAP', text:'L\'invisibilità non è solo individuale: diventa strategia organizzativa. L\'organizzazione cattura sapere attraverso standard, telemetria e piattaforme — trasformando ciò che le persone producono in asset proprietari.'},
+            {tile:'GHO', text:'Quando la cattura si estende oltre l\'organizzazione, la logica estrattiva diventa sistemica: dati appropriati, resi proprietari, convertiti in potere. Non è più un effetto collaterale — è un modello.'}
+        ],
+        closing: 'La catena dell\'estrazione mostra come il valore si sposta dal basso verso l\'alto, dalla persona alla società, diventando sempre più invisibile a chi lo genera. La domanda non è se si estrae, ma chi ne beneficia — e chi può contestarlo.'
+    },
+    {
+        id: 'defaults',
+        title: 'Il potere invisibile dei default',
+        subtitle: 'L\'infrastruttura AI pre-configura comportamenti a ogni scala',
+        steps: [
+            {tile:'AOS', text:'Questo percorso esplora la dimensione infrastrutturale dell\'AI: non uno strumento che si usa, ma un ambiente in cui si opera. A ogni livello — persona, HR, organizzazione, società — i default definiscono ciò che è possibile, facile o impensabile.'},
+            {tile:'HOS', text:'Se la persona vive dentro un sistema pre-configurato, chi ne disegna i confini? HR ha un ruolo chiave: può subire l\'architettura o co-progettarla, definendo dove passa il confine tra decisione umana e automazione.'},
+            {tile:'OS', text:'Dalle scelte di HR alla forma dell\'organizzazione: quando l\'AI diventa strato di coordinamento, non accelera task — elimina workflow. Il potere non è nel comando, ma nel design dei processi.'},
+            {tile:'S0', text:'Ciò che vale per l\'organizzazione si estende alla società: gli algoritmi diventano infrastruttura di coordinamento sociale. I default non sono più scelte aziendali — sono criteri pratici di realtà, contestabili solo in parte.'}
+        ],
+        closing: 'Il potere invisibile dei default mostra come l\'infrastruttura AI pre-configura comportamenti a ogni scala. La domanda chiave non è cosa fa l\'AI, ma cosa rende facile — e cosa rende impensabile.'
+    },
+    {
+        id: 'worker-experience',
+        title: 'L\'esperienza della persona al lavoro',
+        subtitle: 'Le sei facce dell\'esperienza individuale con l\'AI',
+        steps: [
+            {tile:'AUG', text:'Questo percorso attraversa tutte le facce dell\'esperienza individuale con l\'AI al lavoro. La stessa persona, nella stessa giornata, è potenziata, estratta, valutata, governata, esposta e pre-configurata. Sei ruoli diversi dell\'AI, un\'unica esperienza.'},
+            {tile:'SIG', text:'Dall\'augmentation all\'estrazione: lo stesso tool che potenzia l\'output raccoglie tracce. La persona che usa l\'AI è anche la persona che alimenta l\'AI — spesso senza saperlo.'},
+            {tile:'ORA', text:'Dalle tracce al giudizio: i dati estratti alimentano modelli che valutano, classificano e predicono. La persona non solo produce dati — è valutata da essi. Score e label diventano autorità cognitiva.'},
+            {tile:'QWK', text:'Dal giudizio al governo: quando lo score diventa target, le metriche guidano il comportamento. Nudging, scheduling e ranking comprimono la discrezionalità senza bisogno di ordini espliciti.'},
+            {tile:'VIS', text:'Dal governo alla visibilità: non basta essere misurati — bisogna essere visibili nel modo giusto. La persona interiorizza logiche di esposizione: la reputazione diventa condizione di accesso.'},
+            {tile:'AOS', text:'Dalla visibilità all\'infrastruttura: tutti questi ruoli convergono in un ambiente pre-configurato. La persona non usa singoli strumenti — vive dentro un sistema che definisce cosa è facile, difficile o impensabile.'}
+        ],
+        closing: 'L\'esperienza della persona al lavoro non è lineare: è simultanea. Potenziamento, estrazione, giudizio, governo, visibilità e infrastruttura si sovrappongono. La domanda non è quale ruolo prevalga, ma se la persona ha gli strumenti per riconoscerli — e per contestarli.'
+    },
+    {
+        id: 'org-to-society',
+        title: 'Dall\'organizzazione alla società',
+        subtitle: 'Come le dinamiche organizzative diventano regole sociali',
+        steps: [
+            {tile:'CAP', text:'Questo percorso attraversa la riga Organization in diagonale, mostrando come ogni dinamica organizzativa ha un riflesso societario. Dalla cattura del sapere alla sorveglianza istituzionalizzata, le scelte delle organizzazioni costruiscono le regole della società.'},
+            {tile:'SDB', text:'Catturare sapere non basta: serve trasformarlo in decisioni. L\'organizzazione istituzionalizza score e ranking come base decisionale — il plausibile diventa evidenza pratica.'},
+            {tile:'ROU', text:'Dai punteggi al governo dei flussi: quando l\'AI orienta carichi, priorità e assegnazioni, il potere diventa logistico. Non serve più un ordine — basta un algoritmo di dispatch.'},
+            {tile:'ATT', text:'Dal routing alla narrazione: ciò che l\'organizzazione misura e rende visibile guida investimenti e reputazioni. La visibilità può sostituire l\'evidenza se manca un layer di sensemaking.'},
+            {tile:'OS', text:'Dalla narrazione all\'infrastruttura: quando l\'AI diventa strato di coordinamento, non è più un racconto — è l\'architettura stessa dei processi. Workflow elimination, non accelerazione.'},
+            {tile:'SUR', text:'Dall\'organizzazione alla società: il coordinamento algoritmico non resta confinato all\'impresa. Tracciamento, predizione, intervento diventano modello economico e di governo — con asimmetrie strutturali tra chi osserva e chi è osservato.'}
+        ],
+        closing: 'Dall\'organizzazione alla società mostra che le scelte aziendali — come catturare, classificare, governare, narrare e coordinare — non restano dentro le mura dell\'impresa. Diventano regole del gioco. La domanda è: chi le scrive, e chi può cambiarle?'
+    },
+    {
+        id: 'epilogue',
+        title: 'Epilogo — Le domande aperte',
+        subtitle: 'Cinque nodi irrisolti che attraversano l\'intero atlante',
+        steps: [
+            {tile:'GWS', text:'Questo percorso finale attraversa l\'atlante in diagonale, toccando cinque nodi che restano aperti. Non sono risposte — sono domande che ogni percorso lascia dietro di sé. La prima: chi è invisibile? Dietro ogni sistema AI c\'è lavoro umano che non appare. Labeling, moderazione, micro-task: necessari ma fuori scena.'},
+            {tile:'ORA', text:'Dall\'invisibilità al giudizio. Se il ghost work alimenta i modelli, quei modelli poi valutano le persone. Score, ranking e predizioni acquistano autorità — ma chi li ha prodotti, e su quali dati? La domanda aperta: quando il plausibile diventa norma, chi può ancora dire "non è così"?'},
+            {tile:'ROU', text:'Dal giudizio al governo. I punteggi non restano nei report: diventano regole operative. L\'algoritmo assegna carichi, priorità, turni. Il potere è logistico — non serve un ordine, basta un dispatch. La domanda aperta: chi decide ritmo e carico, e chi ha voce per opporsi?'},
+            {tile:'ATT', text:'Dal governo alla narrazione. Ciò che viene misurato e reso visibile orienta investimenti e reputazioni. Ma visibilità non è valore — può sostituirlo, se manca un layer di interpretazione. La domanda aperta: stiamo governando con evidenze o con storie?'},
+            {tile:'S0', text:'Dalla narrazione all\'infrastruttura. Alla fine, tutte queste dinamiche convergono nei default: ciò che il sistema rende facile, difficile o impensabile. Gli algoritmi diventano infrastruttura sociale — criteri pratici di realtà. La domanda aperta: chi disegna i default, e chi può cambiarli?'}
+        ],
+        closing: 'L\'atlante non offre soluzioni — offre coordinate. Estrazione, giudizio, governo, narrazione e infrastruttura non sono forze separate: si intrecciano, si rinforzano, si nascondono l\'una dentro l\'altra. Riconoscerle è il primo passo. Contestarle richiede strumenti, linguaggio e spazi che in gran parte sono ancora da costruire.'
+    }
+];
+
 var CELL_KWS = {
     "Worker": {
         "Tool": "Output↑ locale · delega sintesi/memoria · agency?",
