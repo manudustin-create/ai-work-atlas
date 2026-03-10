@@ -502,7 +502,7 @@ body {
 /* Anthropological label for Worker row cells */
 .cell-anthro-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -559,7 +559,7 @@ body {
     width: 100%;
     height: 100%;
     min-height: 180px;
-    padding: 10px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -567,6 +567,26 @@ body {
     background: var(--white);
     position: relative;
     box-sizing: border-box;
+}
+
+.cell-thumb {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 2px;
+    margin-bottom: 4px;
+}
+
+.cell-front:has(.cell-thumb) .tile-ovrow {
+    display: none;
+}
+
+.cell-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .cell-back {
@@ -700,9 +720,16 @@ body {
 .tile[data-f="Architect"] { border-left-color: var(--c-architect); }
 
 .tile-name {
-    font-size: 0.68rem;
+    font-size: 0.82rem;
+    font-weight: 600;
     color: var(--grey-70);
     line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.tile-name.anthro {
+    color: var(--accent);
+    font-weight: 700;
 }
 
 .tile-ovrow {

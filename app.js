@@ -196,6 +196,13 @@ function buildMatrix() {
             var front = document.createElement('div');
             front.className = 'cell-front';
             
+            if (cellImg) {
+                var thumb = document.createElement('div');
+                thumb.className = 'cell-thumb';
+                thumb.innerHTML = '<img src="' + cellImg + '" alt="' + row + ' / ' + col.k + '">';
+                front.appendChild(thumb);
+            }
+
             if (cellKw === '—' && cellEmpty) {
                 // Empty cell with semantic annotation
                 var emptyDiv = document.createElement('div');
@@ -209,13 +216,6 @@ function buildMatrix() {
                 front.appendChild(emptyDiv);
             } else {
                 // Add anthropological label for Worker row
-                if (row === 'Worker' && ANTHRO_LABELS[col.k]) {
-                    var anthroLabel = document.createElement('div');
-                    anthroLabel.className = 'cell-anthro-label';
-                    anthroLabel.textContent = ANTHRO_LABELS[col.k];
-                    front.appendChild(anthroLabel);
-                }
-                
                 var kwDiv = document.createElement('div');
                 kwDiv.className = 'cell-kws' + (cellKw === '—' ? ' empty' : '');
                 kwDiv.textContent = cellKw;
@@ -237,9 +237,11 @@ function buildMatrix() {
                         var sym = OV_ICON[o] || '•';
                         return '<span class="ov-badge" data-ov="' + o + '" title="' + o + '"><span class="ov-sym">' + sym + '</span><span class="ov-code">[' + o + ']</span></span>';
                     }).join('');
+                    var isAnthro = (row === 'Worker' && ANTHRO_LABELS[col.k]);
+                    var displayName = isAnthro ? ANTHRO_LABELS[col.k] : item.name;
                     t.innerHTML =
                         '<div class="tile-ovrow">' + icons + '</div>' +
-                        '<div class="tile-name">' + item.name + '</div>';
+                        '<div class="tile-name' + (isAnthro ? ' anthro' : '') + '">' + displayName + '</div>';
                     t.onclick = function() { showDetail(item.id); };
                     tilesContainer.appendChild(t);
                 });
