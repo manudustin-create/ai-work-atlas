@@ -201,6 +201,8 @@ function buildMatrix() {
                 var thumb = document.createElement('div');
                 thumb.className = 'cell-thumb';
                 thumb.innerHTML = '<img src="' + cellImg + '" alt="' + row + ' / ' + col.k + '">';
+                thumb.style.cursor = 'pointer';
+                thumb.onclick = (function(itms) { return function() { if (itms.length > 0) showDetail(itms[0].id); }; })(items);
                 front.appendChild(thumb);
             }
 
