@@ -223,6 +223,7 @@ var CELL_IMAGES = {
     "HR": {},
     "Organization": {},
     "Society": {
+        "Occluded": "assets/img/society-occluded.jpg",
         "Mgmt": "assets/img/society-mgmt.jpg",
         "Visibilità": "assets/img/society-visibilita.png"
     }
