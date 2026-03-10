@@ -215,6 +215,7 @@ var CELL_IMAGES = {
     "Worker": {
         "Occluded": "assets/img/worker-occluded.png",
         "Embedded": "assets/img/worker-embedded.png",
+        "Oracolo": "assets/img/worker-oracolo.jpg",
         "Tool": "assets/img/worker-tool.png",
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
