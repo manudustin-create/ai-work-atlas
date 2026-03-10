@@ -353,6 +353,18 @@ function showDetail(id) {
         html += '<span class="overlay-source">' + s + '</span>';
     });
     html += '</div></div>';
+
+    if (item.editorial) {
+        html += '<div class="overlay-editorial"><h3>Approfondimento</h3>';
+        html += item.editorial;
+        if (item.editorialSources) {
+            html += '<div class="overlay-editorial-sources"><h4>Riferimenti</h4><ul>';
+            item.editorialSources.forEach(function(s) { html += '<li>' + s + '</li>'; });
+            html += '</ul></div>';
+        }
+        html += '</div>';
+    }
+
     html += '</div>';
     html += '</div>';
     html += '</div>';

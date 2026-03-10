@@ -931,6 +931,59 @@ body.detail-open .legend {
     flex-wrap: wrap;
 }
 
+.overlay-editorial {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--grey-15);
+}
+
+.overlay-editorial h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.overlay-editorial p {
+    font-size: 1.2rem;
+    line-height: 1.65;
+    color: var(--grey-70);
+    margin-bottom: 14px;
+}
+
+.overlay-editorial blockquote {
+    margin: 16px 0;
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-bg);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--grey-70);
+}
+
+.overlay-editorial-sources h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--grey-50);
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.overlay-editorial-sources li {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--grey-70);
+    margin-bottom: 4px;
+    list-style: none;
+}
+
 .overlay-source {
     font-family: 'Space Mono', monospace;
     font-size: 1rem;
