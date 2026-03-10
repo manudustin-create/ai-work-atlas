@@ -326,11 +326,11 @@ body {
 
 .axis-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
+    font-size: 0.95rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--grey-50);
+    color: var(--grey-70);
     line-height: 1;
     white-space: nowrap;
 }
@@ -348,8 +348,8 @@ body {
 }
 
 .axis-arrow-x {
-    width: 60px;
-    height: 6px;
+    width: 80px;
+    height: 10px;
 }
 
 .axis-y {
@@ -367,8 +367,8 @@ body {
 }
 
 .axis-arrow-y {
-    width: 6px;
-    height: 60px;
+    width: 10px;
+    height: 80px;
 }
 
 .matrix {
