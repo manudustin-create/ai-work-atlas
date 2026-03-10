@@ -220,7 +220,9 @@ var CELL_IMAGES = {
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
     },
-    "HR": {},
+    "HR": {
+        "Tool": "assets/img/hr-tool.jpg"
+    },
     "Organization": {},
     "Society": {
         "Occluded": "assets/img/society-occluded.jpg",
