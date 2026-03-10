@@ -218,11 +218,7 @@ function buildMatrix() {
                 }
                 front.appendChild(emptyDiv);
             } else {
-                // Add anthropological label for Worker row
-                var kwDiv = document.createElement('div');
-                kwDiv.className = 'cell-kws' + (cellKw === '—' ? ' empty' : '');
-                kwDiv.textContent = cellKw;
-                front.appendChild(kwDiv);
+                // keywords rimossi per guadagnare spazio immagini
             }
             
             if (items.length > 0) {
