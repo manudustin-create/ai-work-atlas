@@ -395,7 +395,7 @@ body {
 
 .col-group-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -406,7 +406,7 @@ body {
 
 .col-head h2 {
     font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -414,7 +414,7 @@ body {
 }
 
 .col-head p {
-    font-size: 0.6rem;
+    font-size: 0.78rem;
     color: var(--grey-50);
     margin-top: 2px;
 }
@@ -532,7 +532,7 @@ body {
 
 .row-head h2 {
     font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-transform: uppercase;
     color: var(--black);
@@ -540,7 +540,7 @@ body {
 
 .row-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--grey-50);

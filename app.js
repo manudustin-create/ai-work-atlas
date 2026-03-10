@@ -132,7 +132,7 @@ function buildMatrix() {
     m.innerHTML = '';
 
     // Grid dinamica: colonne e righe calcolate da COLS/ROWS
-    m.style.gridTemplateColumns = '100px repeat(' + COLS.length + ', 1fr)';
+    m.style.gridTemplateColumns = '120px repeat(' + COLS.length + ', 1fr)';
     m.style.gridTemplateRows = 'auto auto repeat(' + ROWS.length + ', 1fr)';
 
     // Build header via DOM to avoid innerHTML += destroying event listeners
