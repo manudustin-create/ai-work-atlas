@@ -52,7 +52,12 @@ function init() {
     $('#intro-btn').addEventListener('click', showIntro);
     $('#tour-btn').addEventListener('click', showTourList);
     $('#view-toggle').addEventListener('change', toggleView);
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideDetail(); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideOverlayPanel();
+        }
+    });
+    $('#overlay-backdrop').addEventListener('click', hideOverlayPanel);
     checkHash();
     window.addEventListener('hashchange', checkHash);
 }
@@ -288,367 +293,200 @@ function showDetail(id) {
     if (!item) return;
 
     var FAMILY_COLOR = {
-        Augment:'--c-augment',
-        Govern:'--c-govern',
-        Meaning:'--c-meaning',
-        Extract:'--c-extract',
-        Judge:'--c-judge',
-        Architect:'--c-architect'
+        Augment:'--c-augment', Govern:'--c-govern', Meaning:'--c-meaning',
+        Extract:'--c-extract', Judge:'--c-judge', Architect:'--c-architect'
     };
 
+    // Highlight tile in matrix
     $$('.tile').forEach(function(t) { t.classList.remove('active'); });
     var tileEl = document.querySelector('.tile[data-id="' + id + '"]');
     if (tileEl) tileEl.classList.add('active');
 
     history.replaceState(null, '', '#' + id);
 
-    document.getElementById('panel-placeholder').style.display = 'none';
-    var pc = document.getElementById('panel-content');
-    pc.style.display = 'block';
-    pc.innerHTML = '';
+    var cellImg = CELL_IMAGES[item.layer] && CELL_IMAGES[item.layer][item.role] ? CELL_IMAGES[item.layer][item.role] : null;
 
-    // Helper: crea elemento con classe e testo
-    function el(tag, cls, text) {
-        var e = document.createElement(tag);
-        if (cls) e.className = cls;
-        if (text) e.textContent = text;
-        return e;
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')">' + item.id + '</div>';
+    html += '<div class="overlay-name">' + item.name + '</div>';
+    html += '<div class="overlay-meta">';
+    html += '<div class="overlay-tag">Family: <span>' + item.family + '</span></div>';
+    html += '<div class="overlay-tag">Layer: <span>' + item.layer + '</span></div>';
+    html += '<div class="overlay-tag">Role: <span>' + (item.role || '—') + '</span></div>';
+    html += '</div>';
+    html += '<div class="overlay-overlays">';
+    item.overlays.forEach(function(o) { html += '<span class="overlay-ov-badge">' + o + '</span>'; });
+    html += '</div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '</div>';
+
+    if (cellImg) {
+        html += '<img class="overlay-img" src="' + cellImg + '" alt="' + item.name + '">';
     }
 
-    // Header
-    var header = el('div', 'panel-header');
+    html += '<div class="overlay-body">';
+    html += '<div class="overlay-section"><h3>Definizione</h3><p>' + item.definition + '</p></div>';
 
-    var idEl = el('div', 'panel-id', item.id);
-    idEl.style.color = 'var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')';
-    header.appendChild(idEl);
+    html += '<div class="overlay-section"><h3>Segnali</h3><ul>';
+    item.signals.forEach(function(s) { html += '<li>' + s + '</li>'; });
+    html += '</ul></div>';
 
-    header.appendChild(el('div', 'panel-name', item.name));
+    html += '<div class="overlay-section"><h3>Failure mode</h3><div class="overlay-callout failure">' + item.failure + '</div></div>';
+    html += '<div class="overlay-section"><h3>Guardrail</h3><div class="overlay-callout guardrail">' + item.guardrail + '</div></div>';
 
-    var meta = el('div', 'panel-meta');
-    [['Family', item.family], ['Layer', item.layer], ['Role', item.role || '—']].forEach(function(pair) {
-        var tag = el('div', 'panel-tag');
-        tag.textContent = pair[0] + ': ';
-        var span = document.createElement('span');
-        span.textContent = pair[1];
-        tag.appendChild(span);
-        meta.appendChild(tag);
-    });
-    header.appendChild(meta);
-
-    var overlays = el('div', 'panel-overlays');
-    item.overlays.forEach(function(o) {
-        overlays.appendChild(el('span', 'panel-overlay', o));
-    });
-    header.appendChild(overlays);
-
-    var close = el('div', 'panel-close', '✕ Chiudi');
-    close.onclick = hideDetail;
-    header.appendChild(close);
-
-    pc.appendChild(header);
-
-    // Body
-    var body = el('div', 'panel-body');
-
-    // Sezione generica
-    function addSection(title, content) {
-        var sec = el('div', 'panel-section');
-        sec.appendChild(el('h3', null, title));
-        sec.appendChild(content);
-        body.appendChild(sec);
-    }
-
-    addSection('Definizione', el('p', null, item.definition));
-
-    var ul = document.createElement('ul');
-    item.signals.forEach(function(s) {
-        ul.appendChild(el('li', null, s));
-    });
-    addSection('Segnali', ul);
-
-    var failDiv = el('div', 'panel-callout failure', item.failure);
-    addSection('Failure mode', failDiv);
-
-    var guardDiv = el('div', 'panel-callout guardrail', item.guardrail);
-    addSection('Guardrail', guardDiv);
-
-    var srcDiv = el('div', 'panel-sources');
+    html += '<div class="overlay-section"><h3>Sources</h3><div class="overlay-sources">';
     item.sources.forEach(function(s, i) {
-        if (i > 0) srcDiv.appendChild(document.createTextNode(' · '));
-        srcDiv.appendChild(el('span', 'panel-source', s));
+        if (i > 0) html += ' · ';
+        html += '<span class="overlay-source">' + s + '</span>';
     });
-    addSection('Sources', srcDiv);
+    html += '</div></div>';
+    html += '</div>';
 
-    pc.appendChild(body);
+    showOverlayPanel(html);
 }
 
 function hideDetail() {
-    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
-    document.getElementById('panel-placeholder').style.display = 'flex';
-    document.getElementById('panel-content').style.display = 'none';
-    history.replaceState(null, '', location.pathname);
+    hideOverlayPanel();
+    endTour();
 }
 
 function showColDetail(colKey) {
     var col = COLS.find(function(c) { return c.k === colKey; });
     if (!col) return;
-    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
-    var pp = document.getElementById('panel-placeholder');
-    var pc = document.getElementById('panel-content');
-    pp.style.display = 'none';
-    pc.style.display = 'block';
-    pc.innerHTML = '';
     history.replaceState(null, '', location.pathname + '#col-' + colKey);
 
-    var header = document.createElement('div');
-    header.className = 'panel-header';
-    var idEl = document.createElement('div');
-    idEl.className = 'panel-id';
-    idEl.textContent = '↕';
-    idEl.style.color = 'var(--grey-50)';
-    header.appendChild(idEl);
-    var nameEl = document.createElement('div');
-    nameEl.className = 'panel-name';
-    nameEl.textContent = col.t;
-    header.appendChild(nameEl);
-    var metaEl = document.createElement('div');
-    metaEl.className = 'panel-meta';
-    if (col.group) {
-        var groupTag = document.createElement('div');
-        groupTag.className = 'panel-tag';
-        groupTag.textContent = 'Gruppo: ';
-        var groupSpan = document.createElement('span');
-        groupSpan.textContent = col.group;
-        groupTag.appendChild(groupSpan);
-        metaEl.appendChild(groupTag);
-    }
-    var tag = document.createElement('div');
-    tag.className = 'panel-tag';
-    tag.textContent = col.s;
-    metaEl.appendChild(tag);
-    header.appendChild(metaEl);
-    var closeA = document.createElement('a');
-    closeA.className = 'panel-close';
-    closeA.href = '#';
-    closeA.textContent = '✕ chiudi';
-    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
-    header.appendChild(closeA);
-    pc.appendChild(header);
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(--grey-50)">↕</div>';
+    html += '<div class="overlay-name">' + col.t + '</div>';
+    html += '<div class="overlay-meta">';
+    if (col.group) html += '<div class="overlay-tag">Gruppo: <span>' + col.group + '</span></div>';
+    html += '<div class="overlay-tag">' + col.s + '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '</div>';
 
-    var body = document.createElement('div');
-    body.className = 'panel-body';
+    html += '<div class="overlay-body">';
     if (col.desc) {
-        var sec = document.createElement('div');
-        sec.className = 'panel-section';
-        var h3 = document.createElement('h3');
-        h3.textContent = 'Descrizione';
-        sec.appendChild(h3);
-        var p = document.createElement('p');
-        p.textContent = col.desc;
-        sec.appendChild(p);
-        body.appendChild(sec);
+        html += '<div class="overlay-section"><h3>Descrizione</h3><p>' + col.desc + '</p></div>';
     }
     var tiles = DATA.filter(function(d) { return d.role === colKey; });
     if (tiles.length) {
-        var sec2 = document.createElement('div');
-        sec2.className = 'panel-section';
-        var h3b = document.createElement('h3');
-        h3b.textContent = 'Celle in questa colonna';
-        sec2.appendChild(h3b);
-        var ul = document.createElement('ul');
+        html += '<div class="overlay-section"><h3>Celle in questa colonna</h3><ul>';
         tiles.forEach(function(d) {
-            var li = document.createElement('li');
-            var a = document.createElement('a');
-            a.href = '#' + d.id;
-            a.textContent = d.layer + ' → ' + d.name;
-            a.addEventListener('click', function(e) { e.preventDefault(); showDetail(d.id); });
-            li.appendChild(a);
-            ul.appendChild(li);
+            html += '<li><a href="#' + d.id + '" onclick="event.preventDefault();hideOverlayPanel();showDetail(\'' + d.id + '\')">' + d.layer + ' → ' + d.name + '</a></li>';
         });
-        sec2.appendChild(ul);
-        body.appendChild(sec2);
+        html += '</ul></div>';
     }
-    pc.appendChild(body);
+    html += '</div>';
+
+    showOverlayPanel(html);
 }
 
 function showRowDetail(rowName) {
     var desc = ROW_DESC[rowName] || '';
     var sub = ROW_SUB[rowName] || '';
-    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
-    var pp = document.getElementById('panel-placeholder');
-    var pc = document.getElementById('panel-content');
-    pp.style.display = 'none';
-    pc.style.display = 'block';
-    pc.innerHTML = '';
     history.replaceState(null, '', location.pathname + '#row-' + rowName);
 
-    var header = document.createElement('div');
-    header.className = 'panel-header';
-    var idEl = document.createElement('div');
-    idEl.className = 'panel-id';
-    idEl.textContent = '↔';
-    idEl.style.color = 'var(--grey-50)';
-    header.appendChild(idEl);
-    var nameEl = document.createElement('div');
-    nameEl.className = 'panel-name';
-    nameEl.textContent = rowName;
-    header.appendChild(nameEl);
-    var metaEl = document.createElement('div');
-    metaEl.className = 'panel-meta';
-    var tag = document.createElement('div');
-    tag.className = 'panel-tag';
-    tag.textContent = sub;
-    metaEl.appendChild(tag);
-    header.appendChild(metaEl);
-    var closeA = document.createElement('a');
-    closeA.className = 'panel-close';
-    closeA.href = '#';
-    closeA.textContent = '✕ chiudi';
-    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
-    header.appendChild(closeA);
-    pc.appendChild(header);
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(--grey-50)">↔</div>';
+    html += '<div class="overlay-name">' + rowName + '</div>';
+    html += '<div class="overlay-meta"><div class="overlay-tag">' + sub + '</div></div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '</div>';
 
-    var body = document.createElement('div');
-    body.className = 'panel-body';
+    html += '<div class="overlay-body">';
     if (desc) {
-        var sec = document.createElement('div');
-        sec.className = 'panel-section';
-        var h3 = document.createElement('h3');
-        h3.textContent = 'Descrizione';
-        sec.appendChild(h3);
-        var p = document.createElement('p');
-        p.textContent = desc;
-        sec.appendChild(p);
-        body.appendChild(sec);
+        html += '<div class="overlay-section"><h3>Descrizione</h3><p>' + desc + '</p></div>';
     }
     var tiles = DATA.filter(function(d) { return d.layer === rowName; });
     if (tiles.length) {
-        var sec2 = document.createElement('div');
-        sec2.className = 'panel-section';
-        var h3b = document.createElement('h3');
-        h3b.textContent = 'Celle in questa riga';
-        sec2.appendChild(h3b);
-        var ul = document.createElement('ul');
+        html += '<div class="overlay-section"><h3>Celle in questa riga</h3><ul>';
         tiles.forEach(function(d) {
-            var li = document.createElement('li');
-            var a = document.createElement('a');
-            a.href = '#' + d.id;
-            a.textContent = (d.role || '') + ' → ' + d.name;
-            a.addEventListener('click', function(e) { e.preventDefault(); showDetail(d.id); });
-            li.appendChild(a);
-            ul.appendChild(li);
+            html += '<li><a href="#' + d.id + '" onclick="event.preventDefault();hideOverlayPanel();showDetail(\'' + d.id + '\')">' + (d.role || '') + ' → ' + d.name + '</a></li>';
         });
-        sec2.appendChild(ul);
-        body.appendChild(sec2);
+        html += '</ul></div>';
     }
-    pc.appendChild(body);
+    html += '</div>';
+
+    showOverlayPanel(html);
 }
 
 function showIntro() {
-    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
-    var pp = document.getElementById('panel-placeholder');
-    var pc = document.getElementById('panel-content');
-    pp.style.display = 'none';
-    pc.style.display = 'block';
-    pc.innerHTML = '';
     history.replaceState(null, '', location.pathname + '#intro');
 
-    var header = document.createElement('div');
-    header.className = 'panel-header';
-    var idEl = document.createElement('div');
-    idEl.className = 'panel-id';
-    idEl.textContent = '◇';
-    idEl.style.color = 'var(--grey-50)';
-    header.appendChild(idEl);
-    var nameEl = document.createElement('div');
-    nameEl.className = 'panel-name';
-    nameEl.textContent = 'AI & Work Atlas';
-    header.appendChild(nameEl);
-    var closeA = document.createElement('a');
-    closeA.className = 'panel-close';
-    closeA.href = '#';
-    closeA.textContent = '✕ chiudi';
-    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
-    header.appendChild(closeA);
-    pc.appendChild(header);
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(--grey-50)">◇</div>';
+    html += '<div class="overlay-name">AI & Work Atlas</div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '</div>';
 
-    var body = document.createElement('div');
-    body.className = 'panel-body';
-    var sec = document.createElement('div');
-    sec.className = 'panel-section';
-    var h3 = document.createElement('h3');
-    h3.textContent = 'Guida alla mappa';
-    sec.appendChild(h3);
+    html += '<div class="overlay-body"><div class="overlay-section"><h3>Guida alla mappa</h3>';
     INTRO_TEXT.split('\n\n').forEach(function(para) {
-        var p = document.createElement('p');
-        p.textContent = para;
-        sec.appendChild(p);
+        html += '<p>' + para + '</p>';
     });
-    body.appendChild(sec);
-    pc.appendChild(body);
+    html += '</div></div>';
+
+    showOverlayPanel(html);
 }
 
 function showTourList() {
     endTour();
-    $$('.tile').forEach(function(t) { t.classList.remove('active'); });
-    var pp = document.getElementById('panel-placeholder');
-    var pc = document.getElementById('panel-content');
-    pp.style.display = 'none';
-    pc.style.display = 'block';
-    pc.innerHTML = '';
     history.replaceState(null, '', location.pathname + '#tours');
 
-    var header = document.createElement('div');
-    header.className = 'panel-header';
-    var idEl = document.createElement('div');
-    idEl.className = 'panel-id';
-    idEl.textContent = '⟡';
-    idEl.style.color = 'var(--accent)';
-    header.appendChild(idEl);
-    var nameEl = document.createElement('div');
-    nameEl.className = 'panel-name';
-    nameEl.textContent = 'Percorsi guidati';
-    header.appendChild(nameEl);
-    var closeA = document.createElement('a');
-    closeA.className = 'panel-close';
-    closeA.href = '#';
-    closeA.textContent = '✕ chiudi';
-    closeA.addEventListener('click', function(e) { e.preventDefault(); hideDetail(); });
-    header.appendChild(closeA);
-    pc.appendChild(header);
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(--accent)">⟡</div>';
+    html += '<div class="overlay-name">Percorsi guidati</div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '</div>';
 
-    var body = document.createElement('div');
-    body.className = 'panel-body';
-    var sec = document.createElement('div');
-    sec.className = 'panel-section';
-    var h3 = document.createElement('h3');
-    h3.textContent = 'Scegli un percorso';
-    sec.appendChild(h3);
-    var intro = document.createElement('p');
-    intro.textContent = 'Quattro percorsi di lettura attraverso la mappa. Ogni percorso collega celle diverse con testi che ne illuminano le connessioni.';
-    sec.appendChild(intro);
-    body.appendChild(sec);
+    html += '<div class="overlay-body">';
+    html += '<div class="overlay-section"><h3>Scegli un percorso</h3>';
+    html += '<p>Cinque percorsi di lettura attraverso la mappa. Ogni percorso collega celle diverse con testi che ne illuminano le connessioni.</p></div>';
 
     TOURS.forEach(function(tour, i) {
-        var card = document.createElement('div');
-        card.className = 'tour-card';
-        var title = document.createElement('div');
-        title.className = 'tour-card-title';
-        title.textContent = tour.title;
-        card.appendChild(title);
-        var sub = document.createElement('div');
-        sub.className = 'tour-card-sub';
-        sub.textContent = tour.subtitle;
-        card.appendChild(sub);
-        var steps = document.createElement('div');
-        steps.className = 'tour-card-steps';
-        steps.textContent = tour.steps.length + ' tappe';
-        card.appendChild(steps);
-        card.addEventListener('click', (function(idx) { return function() { startTour(idx); }; })(i));
-        body.appendChild(card);
+        html += '<div class="tour-card" onclick="hideOverlayPanel();startTour(' + i + ')">';
+        html += '<div class="tour-card-title">' + tour.title + '</div>';
+        html += '<div class="tour-card-sub">' + tour.subtitle + '</div>';
+        html += '<div class="tour-card-steps">' + tour.steps.length + ' tappe</div>';
+        html += '</div>';
     });
 
-    pc.appendChild(body);
+    html += '</div>';
+
+    showOverlayPanel(html);
+}
+
+function showOverlayPanel(html) {
+    var backdrop = $('#overlay-backdrop');
+    var panel = $('#overlay-panel');
+    var content = $('#overlay-content');
+    content.innerHTML = html;
+    backdrop.classList.add('visible');
+    panel.classList.add('visible');
+}
+
+function hideOverlayPanel() {
+    var backdrop = $('#overlay-backdrop');
+    var panel = $('#overlay-panel');
+    backdrop.classList.remove('visible');
+    panel.classList.remove('visible');
+    $('#overlay-content').innerHTML = '';
+    history.replaceState(null, '', location.pathname);
 }
 
 function startTour(tourIndex) {
@@ -664,6 +502,11 @@ function showTourStep() {
     var isClosing = activeTourStep >= tour.steps.length;
     var step = isClosing ? null : tour.steps[activeTourStep];
     var item = step ? DATA.find(function(d) { return d.id === step.tile; }) : null;
+
+    var FAMILY_COLOR = {
+        Augment:'--c-augment', Govern:'--c-govern', Meaning:'--c-meaning',
+        Extract:'--c-extract', Judge:'--c-judge', Architect:'--c-architect'
+    };
 
     // Evidenzia tile nella matrice
     var tourTileIds = tour.steps.map(function(s) { return s.tile; });
@@ -691,173 +534,64 @@ function showTourStep() {
         history.replaceState(null, '', location.pathname + '#tour-' + tour.id + '-' + activeTourStep);
     }
 
-    // Popola side panel
-    var pp = document.getElementById('panel-placeholder');
-    var pc = document.getElementById('panel-content');
-    pp.style.display = 'none';
-    pc.style.display = 'block';
-    pc.innerHTML = '';
+    // Build popup content
+    var html = '';
+    html += '<div class="overlay-header">';
+    html += '<div>';
+    html += '<div class="overlay-id" style="color:var(--accent)">⟡</div>';
+    html += '<div class="overlay-name">' + tour.title + '</div>';
+    html += '<div class="overlay-meta"><div class="overlay-tag">';
+    html += isClosing ? 'Chiusura' : 'Tappa ' + (activeTourStep + 1) + ' di ' + tour.steps.length;
+    html += '</div></div>';
+    html += '</div>';
+    html += '<button class="overlay-close" onclick="endTour();hideOverlayPanel()">✕</button>';
+    html += '</div>';
 
-    // Header percorso
-    var header = document.createElement('div');
-    header.className = 'panel-header';
-    var idEl = document.createElement('div');
-    idEl.className = 'panel-id';
-    idEl.textContent = '⟡';
-    idEl.style.color = 'var(--accent)';
-    header.appendChild(idEl);
-    var nameEl = document.createElement('div');
-    nameEl.className = 'panel-name';
-    nameEl.textContent = tour.title;
-    header.appendChild(nameEl);
-    var metaEl = document.createElement('div');
-    metaEl.className = 'panel-meta';
-    var indicator = document.createElement('div');
-    indicator.className = 'panel-tag';
-    if (isClosing) {
-        indicator.textContent = 'Chiusura';
-    } else {
-        indicator.textContent = 'Tappa ' + (activeTourStep + 1) + ' di ' + tour.steps.length;
-    }
-    metaEl.appendChild(indicator);
-    header.appendChild(metaEl);
-    var closeA = document.createElement('a');
-    closeA.className = 'panel-close';
-    closeA.href = '#';
-    closeA.textContent = '✕ esci dal percorso';
-    closeA.addEventListener('click', function(e) { e.preventDefault(); endTour(); hideDetail(); });
-    header.appendChild(closeA);
-    pc.appendChild(header);
-
-    var body = document.createElement('div');
-    body.className = 'panel-body';
+    html += '<div class="overlay-body">';
 
     if (isClosing) {
-        // Testo di chiusura
-        var closingSec = document.createElement('div');
-        closingSec.className = 'panel-section';
-        var ch3 = document.createElement('h3');
-        ch3.textContent = 'Chiusura';
-        closingSec.appendChild(ch3);
-        var cp = document.createElement('div');
-        cp.className = 'tour-connective';
-        cp.textContent = tour.closing;
-        closingSec.appendChild(cp);
-        body.appendChild(closingSec);
+        html += '<div class="overlay-section"><div class="tour-connective">' + tour.closing + '</div></div>';
     } else {
         // Testo connettivo
         if (step.text) {
-            var connSec = document.createElement('div');
-            connSec.className = 'panel-section';
-            var connH3 = document.createElement('h3');
-            connH3.textContent = activeTourStep === 0 ? 'Introduzione' : 'Connessione';
-            connSec.appendChild(connH3);
-            var connP = document.createElement('div');
-            connP.className = 'tour-connective';
-            connP.textContent = step.text;
-            connSec.appendChild(connP);
-            body.appendChild(connSec);
+            html += '<div class="overlay-section"><h3>' + (activeTourStep === 0 ? 'Introduzione' : 'Connessione') + '</h3>';
+            html += '<div class="tour-connective">' + step.text + '</div></div>';
         }
 
-        // Contenuto tile (come showDetail ma inline)
+        // Contenuto tile
         if (item) {
-            var FAMILY_COLOR = {
-                Augment:'--c-augment', Govern:'--c-govern', Meaning:'--c-meaning',
-                Extract:'--c-extract', Judge:'--c-judge', Architect:'--c-architect'
-            };
+            html += '<div class="overlay-section"><h3 style="color:var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ');font-size:0.72rem;text-transform:none;font-weight:500">' + item.name + '</h3>';
+            html += '<p>' + item.definition + '</p></div>';
 
-            var tileSec = document.createElement('div');
-            tileSec.className = 'panel-section';
-            var tileH3 = document.createElement('h3');
-            tileH3.textContent = item.name;
-            tileH3.style.color = 'var(' + (FAMILY_COLOR[item.family] || '--grey-50') + ')';
-            tileH3.style.fontSize = '0.72rem';
-            tileH3.style.textTransform = 'none';
-            tileH3.style.fontWeight = '500';
-            tileSec.appendChild(tileH3);
-            var defP = document.createElement('p');
-            defP.textContent = item.definition;
-            tileSec.appendChild(defP);
-            body.appendChild(tileSec);
+            html += '<div class="overlay-section"><h3>Segnali</h3><ul>';
+            item.signals.forEach(function(s) { html += '<li>' + s + '</li>'; });
+            html += '</ul></div>';
 
-            var sigSec = document.createElement('div');
-            sigSec.className = 'panel-section';
-            var sigH3 = document.createElement('h3');
-            sigH3.textContent = 'Segnali';
-            sigSec.appendChild(sigH3);
-            var ul = document.createElement('ul');
-            item.signals.forEach(function(s) {
-                var li = document.createElement('li');
-                li.textContent = s;
-                ul.appendChild(li);
-            });
-            sigSec.appendChild(ul);
-            body.appendChild(sigSec);
-
-            var failSec = document.createElement('div');
-            failSec.className = 'panel-section';
-            var failH3 = document.createElement('h3');
-            failH3.textContent = 'Failure mode';
-            failSec.appendChild(failH3);
-            var failDiv = document.createElement('div');
-            failDiv.className = 'panel-callout failure';
-            failDiv.textContent = item.failure;
-            failSec.appendChild(failDiv);
-            body.appendChild(failSec);
-
-            var guardSec = document.createElement('div');
-            guardSec.className = 'panel-section';
-            var guardH3 = document.createElement('h3');
-            guardH3.textContent = 'Guardrail';
-            guardSec.appendChild(guardH3);
-            var guardDiv = document.createElement('div');
-            guardDiv.className = 'panel-callout guardrail';
-            guardDiv.textContent = item.guardrail;
-            guardSec.appendChild(guardDiv);
-            body.appendChild(guardSec);
+            html += '<div class="overlay-section"><h3>Failure mode</h3><div class="overlay-callout failure">' + item.failure + '</div></div>';
+            html += '<div class="overlay-section"><h3>Guardrail</h3><div class="overlay-callout guardrail">' + item.guardrail + '</div></div>';
         }
     }
 
     // Navigazione
-    var nav = document.createElement('div');
-    nav.className = 'tour-nav';
-
-    var prevBtn = document.createElement('button');
-    prevBtn.className = 'tour-nav-btn';
+    html += '<div class="tour-nav">';
     if (activeTourStep === 0) {
-        prevBtn.textContent = '← Percorsi';
-        prevBtn.addEventListener('click', function() { endTour(); showTourList(); });
+        html += '<button class="tour-nav-btn" onclick="endTour();showTourList()">← Percorsi</button>';
     } else {
-        prevBtn.textContent = '← Indietro';
-        prevBtn.addEventListener('click', function() { activeTourStep--; showTourStep(); });
+        html += '<button class="tour-nav-btn" onclick="activeTourStep--;showTourStep()">← Indietro</button>';
     }
-    nav.appendChild(prevBtn);
-
-    var stepIndicator = document.createElement('span');
-    stepIndicator.className = 'tour-step-indicator';
+    html += '<span class="tour-step-indicator">' + (isClosing ? '✓' : (activeTourStep + 1) + ' / ' + tour.steps.length) + '</span>';
     if (isClosing) {
-        stepIndicator.textContent = '✓';
-    } else {
-        stepIndicator.textContent = (activeTourStep + 1) + ' / ' + tour.steps.length;
-    }
-    nav.appendChild(stepIndicator);
-
-    var nextBtn = document.createElement('button');
-    nextBtn.className = 'tour-nav-btn';
-    if (isClosing) {
-        nextBtn.textContent = 'Percorsi →';
-        nextBtn.addEventListener('click', function() { endTour(); showTourList(); });
+        html += '<button class="tour-nav-btn" onclick="endTour();showTourList()">Percorsi →</button>';
     } else if (activeTourStep === tour.steps.length - 1) {
-        nextBtn.textContent = 'Chiusura →';
-        nextBtn.addEventListener('click', function() { activeTourStep++; showTourStep(); });
+        html += '<button class="tour-nav-btn" onclick="activeTourStep++;showTourStep()">Chiusura →</button>';
     } else {
-        nextBtn.textContent = 'Avanti →';
-        nextBtn.addEventListener('click', function() { activeTourStep++; showTourStep(); });
+        html += '<button class="tour-nav-btn" onclick="activeTourStep++;showTourStep()">Avanti →</button>';
     }
-    nav.appendChild(nextBtn);
+    html += '</div>';
 
-    body.appendChild(nav);
-    pc.appendChild(body);
+    html += '</div>';
+
+    showOverlayPanel(html);
 }
 
 function endTour() {
@@ -871,6 +605,7 @@ function endTour() {
 function resetView() {
     lens = null;
     endTour();
+    hideOverlayPanel();
     $$('.lens').forEach(function(b) { b.classList.remove('active'); });
     $('#matrix').classList.remove('show-s0', 'show-ex', 'view-images');
     $('#view-toggle').checked = false;
@@ -879,7 +614,6 @@ function resetView() {
         t.classList.remove('dim', 'highlight', 'active');
         t.style.display = '';
     });
-    hideDetail();
 }
 
 function checkHash() {
