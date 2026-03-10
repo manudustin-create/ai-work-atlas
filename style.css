@@ -838,14 +838,14 @@ body.detail-open .legend {
 
 .overlay-id {
     font-family: 'Space Mono', monospace;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 1;
 }
 
 .overlay-name {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: 500;
     color: var(--black);
 }
@@ -858,7 +858,7 @@ body.detail-open .legend {
 
 .overlay-tag {
     font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: var(--grey-50);
 }
 
@@ -887,7 +887,7 @@ body.detail-open .legend {
 
 .overlay-section h3 {
     font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -897,8 +897,8 @@ body.detail-open .legend {
 
 .overlay-section p,
 .overlay-section li {
-    font-size: 1rem;
-    line-height: 1.55;
+    font-size: 1.2rem;
+    line-height: 1.6;
     color: var(--grey-70);
 }
 
@@ -914,11 +914,11 @@ body.detail-open .legend {
 .overlay-section a:hover { color: var(--black); }
 
 .overlay-callout {
-    padding: 12px 14px;
+    padding: 14px 18px;
     background: var(--grey-05);
     border-left: 2px solid var(--grey-30);
-    font-size: 1rem;
-    line-height: 1.55;
+    font-size: 1.2rem;
+    line-height: 1.6;
     color: var(--grey-70);
 }
 
@@ -933,7 +933,7 @@ body.detail-open .legend {
 
 .overlay-source {
     font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: var(--grey-50);
 }
 
@@ -946,7 +946,7 @@ body.detail-open .legend {
 
 .overlay-ov-badge {
     font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
+    font-size: 1rem;
     padding: 2px 5px;
     background: var(--accent-bg);
     color: var(--accent);
