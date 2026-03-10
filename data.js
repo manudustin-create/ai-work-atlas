@@ -214,6 +214,7 @@ var CELL_EMPTY = {
 var CELL_IMAGES = {
     "Worker": {
         "Tool": "assets/img/worker-tool.png",
+        "Embedded": "assets/img/worker-embedded.png",
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
     },
