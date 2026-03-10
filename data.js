@@ -214,27 +214,14 @@ var CELL_EMPTY = {
 var CELL_IMAGES = {
     "Worker": {
         "Tool": "assets/img/worker-tool.png",
-        "Embedded": "assets/worker_extract.jpg",
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
     },
-    "HR": {
-        "Oracolo": "assets/hr_oracle.jpg",
-        "Mgmt": "assets/hr_mgmt.jpg"
-    },
-    "Organization": {
-        "Tool": "assets/org_tool.jpg",
-        "Embedded": "assets/org_extract.jpg",
-        "Mgmt": "assets/org_mgmt.jpg",
-        "Visibilità": "assets/org_visibility.jpg",
-        "OS": "assets/org_os.jpg"
-    },
+    "HR": {},
+    "Organization": {},
     "Society": {
-        "Occluded": "assets/society_extract.jpg",
-        "Oracolo": "assets/society_oracle.jpg",
         "Mgmt": "assets/img/society-mgmt.jpg",
-        "Visibilità": "assets/img/society-visibilita.png",
-        "OS": "assets/society_os.jpg"
+        "Visibilità": "assets/img/society-visibilita.png"
     }
 };
 

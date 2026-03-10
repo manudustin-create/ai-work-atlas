@@ -323,10 +323,15 @@ function showDetail(id) {
     html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
     html += '</div>';
 
+    html += '<div class="overlay-columns' + (cellImg ? ' has-image' : '') + '">';
+
     if (cellImg) {
+        html += '<div class="overlay-col-img">';
         html += '<img class="overlay-img" src="' + cellImg + '" alt="' + item.name + '">';
+        html += '</div>';
     }
 
+    html += '<div class="overlay-col-text">';
     html += '<div class="overlay-body">';
     html += '<div class="overlay-section"><h3>Definizione</h3><p>' + item.definition + '</p></div>';
 
@@ -343,6 +348,8 @@ function showDetail(id) {
         html += '<span class="overlay-source">' + s + '</span>';
     });
     html += '</div></div>';
+    html += '</div>';
+    html += '</div>';
     html += '</div>';
 
     showOverlayPanel(html);
