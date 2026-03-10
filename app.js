@@ -57,7 +57,8 @@ function init() {
             hideOverlayPanel();
         }
     });
-    $('#overlay-backdrop').addEventListener('click', hideOverlayPanel);
+    // Backdrop rimosso — navigazione back del browser gestita da popstate
+    window.addEventListener('popstate', function() { checkHash(); });
     checkHash();
     window.addEventListener('hashchange', checkHash);
 }
@@ -304,7 +305,7 @@ function showDetail(id) {
     var tileEl = document.querySelector('.tile[data-id="' + id + '"]');
     if (tileEl) tileEl.classList.add('active');
 
-    history.replaceState(null, '', '#' + id);
+    history.pushState(null, '', '#' + id);
 
     var cellImg = CELL_IMAGES[item.layer] && CELL_IMAGES[item.layer][item.role] ? CELL_IMAGES[item.layer][item.role] : null;
 
@@ -322,7 +323,7 @@ function showDetail(id) {
     item.overlays.forEach(function(o) { html += '<span class="overlay-ov-badge">' + o + '</span>'; });
     html += '</div>';
     html += '</div>';
-    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
     html += '<div class="overlay-columns' + (cellImg ? ' has-image' : '') + '">';
@@ -365,7 +366,7 @@ function hideDetail() {
 function showColDetail(colKey) {
     var col = COLS.find(function(c) { return c.k === colKey; });
     if (!col) return;
-    history.replaceState(null, '', location.pathname + '#col-' + colKey);
+    history.pushState(null, '', location.pathname + '#col-' + colKey);
 
     var html = '';
     html += '<div class="overlay-header">';
@@ -377,7 +378,7 @@ function showColDetail(colKey) {
     html += '<div class="overlay-tag">' + col.s + '</div>';
     html += '</div>';
     html += '</div>';
-    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
     html += '<div class="overlay-body">';
@@ -400,7 +401,7 @@ function showColDetail(colKey) {
 function showRowDetail(rowName) {
     var desc = ROW_DESC[rowName] || '';
     var sub = ROW_SUB[rowName] || '';
-    history.replaceState(null, '', location.pathname + '#row-' + rowName);
+    history.pushState(null, '', location.pathname + '#row-' + rowName);
 
     var html = '';
     html += '<div class="overlay-header">';
@@ -409,7 +410,7 @@ function showRowDetail(rowName) {
     html += '<div class="overlay-name">' + rowName + '</div>';
     html += '<div class="overlay-meta"><div class="overlay-tag">' + sub + '</div></div>';
     html += '</div>';
-    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
     html += '<div class="overlay-body">';
@@ -430,7 +431,7 @@ function showRowDetail(rowName) {
 }
 
 function showIntro() {
-    history.replaceState(null, '', location.pathname + '#intro');
+    history.pushState(null, '', location.pathname + '#intro');
 
     var html = '';
     html += '<div class="overlay-header">';
@@ -438,7 +439,7 @@ function showIntro() {
     html += '<div class="overlay-id" style="color:var(--grey-50)">◇</div>';
     html += '<div class="overlay-name">AI & Work Atlas</div>';
     html += '</div>';
-    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
     html += '<div class="overlay-body"><div class="overlay-section"><h3>Guida alla mappa</h3>';
@@ -452,7 +453,7 @@ function showIntro() {
 
 function showTourList() {
     endTour();
-    history.replaceState(null, '', location.pathname + '#tours');
+    history.pushState(null, '', location.pathname + '#tours');
 
     var html = '';
     html += '<div class="overlay-header">';
@@ -460,7 +461,7 @@ function showTourList() {
     html += '<div class="overlay-id" style="color:var(--accent)">⟡</div>';
     html += '<div class="overlay-name">Percorsi guidati</div>';
     html += '</div>';
-    html += '<button class="overlay-close" onclick="hideOverlayPanel()">✕</button>';
+    html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
     html += '<div class="overlay-body">';
@@ -481,21 +482,16 @@ function showTourList() {
 }
 
 function showOverlayPanel(html) {
-    var backdrop = $('#overlay-backdrop');
-    var panel = $('#overlay-panel');
-    var content = $('#overlay-content');
+    var page = $('#detail-page');
+    var content = $('#detail-content');
     content.innerHTML = html;
-    backdrop.classList.add('visible');
-    panel.classList.add('visible');
+    page.classList.add('visible');
+    document.body.classList.add('detail-open');
+    window.scrollTo(0, 0);
 }
 
 function hideOverlayPanel() {
-    var backdrop = $('#overlay-backdrop');
-    var panel = $('#overlay-panel');
-    backdrop.classList.remove('visible');
-    panel.classList.remove('visible');
-    $('#overlay-content').innerHTML = '';
-    history.replaceState(null, '', location.pathname);
+    history.back();
 }
 
 function startTour(tourIndex) {
@@ -627,7 +623,17 @@ function resetView() {
 
 function checkHash() {
     var h = location.hash.slice(1);
-    if (!h) return;
+    if (!h) {
+        // Nessun hash → torna alla mappa
+        var page = $('#detail-page');
+        if (page.classList.contains('visible')) {
+            page.classList.remove('visible');
+            document.body.classList.remove('detail-open');
+            $('#detail-content').innerHTML = '';
+            endTour();
+        }
+        return;
+    }
     if (h === 'intro') { showIntro(); return; }
     if (h === 'tours') { showTourList(); return; }
     if (h.indexOf('tour-') === 0) {

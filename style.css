@@ -791,41 +791,27 @@ body {
 /* Esiti styles now in top-bar section */
 
 /* ═══════════════════════════════════════
-   OVERLAY POPUP
+   DETAIL PAGE (full-page view)
 ═══════════════════════════════════════ */
-.overlay-backdrop {
+.detail-page {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 900;
-}
-
-.overlay-backdrop.visible {
-    display: block;
-}
-
-.overlay-panel {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 94vw;
-    max-height: 96vh;
-    background: var(--white);
-    border: 1px solid var(--grey-15);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    z-index: 910;
+    min-height: 0;
+    flex: 1;
     overflow-y: auto;
-    padding: 32px 36px;
+    padding: 32px 48px;
+    background: var(--white);
+    box-sizing: border-box;
 }
 
-.overlay-panel.visible {
+.detail-page.visible {
     display: block;
+}
+
+body.detail-open .main-layout,
+body.detail-open .top-bar,
+body.detail-open .legend {
+    display: none;
 }
 
 .overlay-header {
@@ -873,16 +859,15 @@ body {
 
 .overlay-close {
     font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     background: transparent;
     border: 1px solid var(--grey-15);
     color: var(--grey-50);
     cursor: pointer;
-    width: 28px;
-    height: 28px;
+    padding: 6px 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
     flex-shrink: 0;
 }
 .overlay-close:hover { border-color: var(--grey-30); color: var(--black); }
@@ -962,26 +947,25 @@ body {
 
 .overlay-columns.has-image {
     display: flex;
-    gap: 32px;
+    gap: 40px;
     align-items: flex-start;
 }
 
 .overlay-col-img {
-    flex: 0 0 60%;
+    flex: 0 0 55%;
     position: sticky;
-    top: 0;
+    top: 32px;
 }
 
 .overlay-col-text {
     flex: 1;
     min-width: 0;
-    overflow-y: auto;
 }
 
 .overlay-img {
     width: 100%;
     height: auto;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 /* ═══════════════════════════════════════
@@ -1171,9 +1155,15 @@ body {
         flex-wrap: wrap;
         gap: 6px;
     }
-    .overlay-panel {
-        width: 95vw;
-        max-height: 90vh;
-        padding: 16px;
+    .detail-page {
+        padding: 16px 12px;
+    }
+    .overlay-columns.has-image {
+        flex-direction: column;
+    }
+    .overlay-col-img {
+        flex: none;
+        width: 100%;
+        position: static;
     }
 }
