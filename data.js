@@ -213,8 +213,9 @@ var CELL_EMPTY = {
    Usa path relativi (assets/img/...). */
 var CELL_IMAGES = {
     "Worker": {
-        "Tool": "assets/img/worker-tool.png",
+        "Occluded": "assets/img/worker-occluded.png",
         "Embedded": "assets/img/worker-embedded.png",
+        "Tool": "assets/img/worker-tool.png",
         "Mgmt": "assets/img/worker-mgmt.jpg",
         "Visibilità": "assets/img/worker-visibilita.png"
     },
