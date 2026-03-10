@@ -238,9 +238,10 @@ function buildMatrix() {
                     }).join('');
                     var isAnthro = (row === 'Worker' && ANTHRO_LABELS[col.k]);
                     var displayName = isAnthro ? ANTHRO_LABELS[col.k] : item.name;
+                    var rowClass = ' row-' + row.toLowerCase();
                     t.innerHTML =
                         '<div class="tile-ovrow">' + icons + '</div>' +
-                        '<div class="tile-name' + (isAnthro ? ' anthro' : '') + '">' + displayName + '</div>';
+                        '<div class="tile-name' + rowClass + '">' + displayName + '</div>';
                     t.onclick = function() { showDetail(item.id); };
                     tilesContainer.appendChild(t);
                 });

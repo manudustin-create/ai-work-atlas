@@ -734,8 +734,23 @@ body {
     text-transform: uppercase;
 }
 
-.tile-name.anthro {
+.tile-name.row-worker {
     color: var(--accent);
+    font-weight: 700;
+}
+
+.tile-name.row-hr {
+    color: var(--c-govern);
+    font-weight: 700;
+}
+
+.tile-name.row-organization {
+    color: var(--c-architect);
+    font-weight: 700;
+}
+
+.tile-name.row-society {
+    color: var(--c-meaning);
     font-weight: 700;
 }
 
