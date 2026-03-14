@@ -42,8 +42,8 @@ var ROLE = {
 DATA.forEach(function(d) { d.role = ROLE[d.id] || null; });
 
 var COLS = [
-            {k:'Occluded',t:'Occluded',s:'structural invisibility',group:'Extractive',desc:"Invisibilità strutturale: il lavoro esiste ma è deliberatamente nascosto, negato, frammentato. Chi lo svolge è necessario ma fuori scena — labeling, moderazione, micro-task che rendono possibile l'AI. Il rischio ricade sulla singola persona senza rete né riconoscimento. La domanda chiave: chi è invisibile, e a chi conviene che lo resti?"},
-            {k:'Embedded',t:'Embedded',s:'processual invisibility',group:'Extractive',desc:"Invisibilità processuale: l'estrazione avviene così fluidamente da essere indistinguibile dall'uso. La persona è simultaneamente utente e trainer, consumatore e produttore — il confine tra lavoro e non-lavoro si dissolve. La domanda chiave: se non sai di lavorare, puoi contestare le condizioni?"},
+            {k:'Occluded',t:'Occluded',s:'',group:'Extractive',desc:"Invisibilità strutturale: il lavoro esiste ma è deliberatamente nascosto, negato, frammentato. Chi lo svolge è necessario ma fuori scena — labeling, moderazione, micro-task che rendono possibile l'AI. Il rischio ricade sulla singola persona senza rete né riconoscimento. La domanda chiave: chi è invisibile, e a chi conviene che lo resti?"},
+            {k:'Embedded',t:'Embedded',s:'',group:'Extractive',desc:"Invisibilità processuale: l'estrazione avviene così fluidamente da essere indistinguibile dall'uso. La persona è simultaneamente utente e trainer, consumatore e produttore — il confine tra lavoro e non-lavoro si dissolve. La domanda chiave: se non sai di lavorare, puoi contestare le condizioni?"},
             {k:'Tool',t:'Tool',s:'assistive',desc:"L'AI come strumento: potenzia l'output individuale, accelera task, abbassa l'attrito. La persona resta apparentemente al timone. Ma lo strumento non è neutro: ridefinisce cosa è facile e cosa è difficile, cosa si delega e cosa si smette di fare. La domanda chiave: augmentation o sostituzione silenziosa del giudizio?"},
             {k:'Oracolo',t:'Oracle',s:'inferential',desc:"L'AI come autorità inferenziale: score, ranking, predizioni e label diventano base decisionale. Il modello produce output 'plausibili' che vengono trattati come verità. La domanda chiave: quando il plausibile diventa norma, chi può ancora contestare?"},
             {k:'Mgmt',t:'Algorithmic Mgmt',s:'actuating',desc:"L'AI come sistema di governo: metriche, nudging, scheduling, routing e incentivi micro guidano il comportamento senza bisogno di gerarchia classica. Il controllo è nel design, non nel comando. La domanda chiave: chi decide ritmo, carico e criteri — e chi può opporsi?"},
@@ -253,6 +253,5 @@ var OVERLAYS = [
 OVERLAYS.forEach(function(o) { o.n = DATA.filter(function(d) { return d.overlays.includes(o.c); }).length; });
 
 var BANDS = [
-    {code:'S0', css:'band-s0', title:'Sfondo Cognitivo — AI as System 0', text:'AI come ambiente di pre-selezione e sintesi: i default diventano comportamento. Rischio: deferenza, appiattimento del contraddittorio, cattura dei criteri di realtà.', link:'S0'},
-    {code:'EX', css:'band-ex', title:'Sfondo Economico-Politico — General Intellect', text:'Cattura del sapere sociale e trasformazione in rendita infrastrutturale. Rischio: lock-in, appropriazione, lavoro invisibile e polarizzazione.', link:'CAP'}
+    {code:'S0', css:'band-s0', title:'Sfondo Cognitivo — AI as System 0', text:'AI come ambiente di pre-selezione e sintesi: i default diventano comportamento. Rischio: deferenza, appiattimento del contraddittorio, cattura dei criteri di realtà.', link:'S0'}
 ];
