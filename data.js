@@ -72,6 +72,15 @@ var INFORG_TRIADS = {
     'OS':         { id:'system-shaped', ag:'preconfigured', ct:'infrastructural' }
 };
 
+var ECON_REGIME = {
+    'Occluded':   { id:'PLT', label:'Platform economy' },
+    'Embedded':   { id:'ATE', label:'Attention economy' },
+    'Tool':       { id:'KBE', label:'Knowledge-based economy' },
+    'Oracolo':    { id:'DTE', label:'Data economy' },
+    'Mgmt':       { id:'GIG', label:'Gig economy' },
+    'Visibilità': { id:'RPE', label:'Reputation economy' },
+    'OS':         { id:'KSH', label:'K-shaped economy' }
+};
 
 
 

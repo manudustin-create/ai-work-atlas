@@ -133,7 +133,7 @@ function buildMatrix() {
 
     // Grid dinamica: colonne e righe calcolate da COLS/ROWS
     m.style.gridTemplateColumns = '120px repeat(' + COLS.length + ', 1fr)';
-    m.style.gridTemplateRows = 'auto auto repeat(' + ROWS.length + ', 1fr)';
+    m.style.gridTemplateRows = 'auto auto repeat(' + ROWS.length + ', 1fr) auto';
 
     // Build header via DOM to avoid innerHTML += destroying event listeners
     var corner = document.createElement('div');
@@ -271,6 +271,22 @@ function buildMatrix() {
         
 
     });
+
+    // Strip "Economic regime" (stile Inforg, sotto Society)
+    var econCorner = document.createElement('div');
+    econCorner.className = 'subhead-corner econ-corner';
+    econCorner.innerHTML = '<span title="Economic regime: il regime economico dominante associato a ciascun ruolo socio-tecnico dell\'AI.">Economic regime</span>';
+    m.appendChild(econCorner);
+
+    var econStrip = document.createElement('div');
+    econStrip.className = 'inforg-strip econ-strip';
+    econStrip.style.gridTemplateColumns = 'repeat(' + COLS.length + ', 1fr)';
+    econStrip.innerHTML = COLS.map(function(col) {
+        var e = ECON_REGIME[col.k];
+        if (!e) return '<div class="inforg-cell">—</div>';
+        return '<div class="inforg-cell" title="' + e.id + ' — ' + e.label + '">' + e.label + '</div>';
+    }).join('');
+    m.appendChild(econStrip);
 }
 
 function filter() {
