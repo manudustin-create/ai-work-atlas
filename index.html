@@ -13,66 +13,120 @@
     <meta name="twitter:description" content="Mappa interattiva dei ruoli socio-tecnici dell'AI nel lavoro.">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="page-home">
 
-<nav class="lenses">
-    <span class="lenses-label">Lenti</span>
-    <div class="lens-group" id="lenses"></div>
-    <div class="spacer"></div>
-    <input type="text" class="search" id="search" placeholder="Cerca...">
-    <button class="reset-btn" id="reset">Reset</button>
-    <button class="intro-btn" id="intro-btn" title="Guida alla mappa">?</button>
-    <button class="tour-btn" id="tour-btn" title="Percorsi guidati">⟡</button>
-    <label class="view-switch">
-        <input type="checkbox" id="view-toggle">
-        <span class="switch-track"><span class="switch-thumb"></span></span>
-        <span class="switch-labels"><span class="switch-label-txt">Txt</span><span class="switch-label-img">Img</span></span>
-    </label>
-</nav>
+<header class="site-header">
+    <a href="index.html" class="site-logo">AI & Work Atlas</a>
+    <nav class="site-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="matrice.html">Matrice</a>
+    </nav>
+</header>
 
-<section class="top-bar">
-    <div class="bands" id="bands"></div>
+<section class="home-hero">
+    <div class="home-kicker">Progetto di ricerca</div>
+    <h1 class="home-title">AI <span class="accent">&amp;</span> Work Atlas</h1>
+    <p class="home-intro">
+        Una mappa interattiva dei ruoli socio-tecnici dell'intelligenza artificiale nel lavoro.
+        Percorsi di lettura tra potenziamento, estrazione, giudizio, governo, visibilità e infrastruttura.
+    </p>
 </section>
 
-<div class="main-layout">
-    <main class="matrix-area">
-        <div class="matrix-wrap" aria-label="Matrice AI & Work con assi">
-            <div class="axis axis-x">
-                <div class="axis-label">Socio-technical roles of AI in work</div>
-                <svg class="axis-arrow axis-arrow-x" viewBox="0 0 120 10" preserveAspectRatio="none" aria-hidden="true">
-                    <defs>
-                        <marker id="arrow-x" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                            <path d="M0,0 L8,4 L0,8 Z" fill="var(--grey-50)"></path>
-                        </marker>
-                    </defs>
-                    <line x1="0" y1="5" x2="116" y2="5" stroke="var(--grey-50)" stroke-width="2" marker-end="url(#arrow-x)"></line>
-                </svg>
-            </div>
-
-            <div class="axis axis-y">
-                <div class="axis-label">SCOPE</div>
-                <svg class="axis-arrow axis-arrow-y" viewBox="0 0 10 120" aria-hidden="true">
-                    <defs>
-                        <marker id="arrow-y" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                            <path d="M0,0 L8,4 L0,8 Z" fill="var(--grey-50)"></path>
-                        </marker>
-                    </defs>
-                    <line x1="5" y1="0" x2="5" y2="116" stroke="var(--grey-50)" stroke-width="2" marker-end="url(#arrow-y)"></line>
-                </svg>
-            </div>
-
-            <div class="matrix" id="matrix"></div>
+<section class="home-sections">
+    <a href="matrice.html" class="home-card">
+        <div class="home-card-preview">
+            <svg viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <!-- Column headers -->
+                <rect x="40" y="0" width="34" height="10" rx="1" fill="#2d6a6a" opacity=".65"/>
+                <rect x="78" y="0" width="34" height="10" rx="1" fill="#8b4049" opacity=".65"/>
+                <rect x="116" y="0" width="34" height="10" rx="1" fill="#5a6340" opacity=".65"/>
+                <rect x="154" y="0" width="34" height="10" rx="1" fill="#5a6340" opacity=".65"/>
+                <rect x="192" y="0" width="34" height="10" rx="1" fill="#6b5344" opacity=".65"/>
+                <rect x="230" y="0" width="34" height="10" rx="1" fill="#5e4a6e" opacity=".65"/>
+                <!-- Row labels -->
+                <text x="4" y="28" font-size="7" fill="#b8860b" font-family="monospace" font-weight="700" opacity=".9">WRK</text>
+                <text x="4" y="52" font-size="7" fill="#b8860b" font-family="monospace" font-weight="700" opacity=".9">HR</text>
+                <text x="4" y="76" font-size="7" fill="#b8860b" font-family="monospace" font-weight="700" opacity=".9">ORG</text>
+                <text x="4" y="100" font-size="7" fill="#b8860b" font-family="monospace" font-weight="700" opacity=".9">SOC</text>
+                <!-- Grid cells -->
+                <g opacity=".18">
+                    <rect x="40" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="78" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="116" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="154" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="192" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="230" y="16" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="40" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="78" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="116" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="154" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="192" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="230" y="40" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="40" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="78" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="116" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="154" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="192" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="230" y="64" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="40" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="78" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="116" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="154" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="192" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                    <rect x="230" y="88" width="34" height="22" rx="1" fill="none" stroke="#888" stroke-width=".5"/>
+                </g>
+                <!-- Accent highlights -->
+                <rect x="40" y="16" width="34" height="22" rx="1" fill="#b8860b" opacity=".06"/>
+                <rect x="116" y="40" width="34" height="22" rx="1" fill="#b8860b" opacity=".06"/>
+                <rect x="192" y="64" width="34" height="22" rx="1" fill="#b8860b" opacity=".06"/>
+                <rect x="78" y="88" width="34" height="22" rx="1" fill="#b8860b" opacity=".06"/>
+                <!-- Cell content hints -->
+                <line x1="44" y1="22" x2="62" y2="22" stroke="#b8860b" stroke-width="1.5" opacity=".4"/>
+                <line x1="44" y1="26" x2="56" y2="26" stroke="#888" stroke-width=".5" opacity=".3"/>
+                <line x1="120" y1="46" x2="140" y2="46" stroke="#b8860b" stroke-width="1.5" opacity=".4"/>
+                <line x1="120" y1="50" x2="134" y2="50" stroke="#888" stroke-width=".5" opacity=".3"/>
+                <line x1="196" y1="70" x2="212" y2="70" stroke="#b8860b" stroke-width="1.5" opacity=".4"/>
+                <line x1="196" y1="74" x2="208" y2="74" stroke="#888" stroke-width=".5" opacity=".3"/>
+                <line x1="82" y1="94" x2="100" y2="94" stroke="#b8860b" stroke-width="1.5" opacity=".4"/>
+                <line x1="82" y1="98" x2="94" y2="98" stroke="#888" stroke-width=".5" opacity=".3"/>
+            </svg>
         </div>
-    </main>
-    
-</div>
+        <div class="home-card-label">Esplora</div>
+        <div class="home-card-title">La Matrice</div>
+        <p class="home-card-desc">
+            4 livelli di analisi &times; 7 ruoli socio-tecnici dell'AI.
+            Naviga le celle, attiva le lenti tematiche, segui i percorsi guidati.
+        </p>
+        <span class="home-card-arrow">&rarr; Apri la mappa</span>
+    </a>
 
-<section class="detail-page" id="detail-page">
-    <div class="detail-page-inner" id="detail-content"></div>
+    <a href="ats_cartography.html" class="home-card home-card-wide">
+        <div class="home-card-preview">
+            <img src="The merit factory_overview HP.png" alt="The Merit Factory — overview della cartografia ATS">
+        </div>
+        <div class="home-card-label">Esplora</div>
+        <div class="home-card-title">ATS Cartography</div>
+        <p class="home-card-desc">
+            Cartografia del processo di selezione algoritmico.
+            Come gli ATS trasformano candidature in dati, punteggi e decisioni.
+        </p>
+        <span class="home-card-arrow">&rarr; Apri la cartografia</span>
+    </a>
+
+    <div class="home-card home-card-disabled">
+        <div class="home-card-label">Prossimamente</div>
+        <div class="home-card-title">Percorsi di lettura</div>
+        <p class="home-card-desc">
+            Approfondimenti editoriali che attraversano la matrice:
+            dall'augmentation alla sorveglianza, dal dataismo alla società liquida.
+        </p>
+        <span class="home-card-arrow" style="color: var(--grey-30);">In arrivo</span>
+    </div>
 </section>
 
+<footer class="home-footer">
+    AI & Work Atlas — Progetto di ricerca e divulgazione
+</footer>
 
-<script src="data.js"></script>
-<script src="app.js"></script>
 </body>
 </html>
