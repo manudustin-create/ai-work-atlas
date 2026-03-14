@@ -488,7 +488,7 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    text-transform: lowercase;
+    text-transform: none;
     color: var(--grey-50);
 
     cursor: help;
