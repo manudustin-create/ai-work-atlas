@@ -1033,6 +1033,9 @@ body.detail-open .legend {
     gap: 40px;
     align-items: flex-start;
 }
+.overlay-columns.has-image + .overlay-columns.has-image {
+    margin-top: 48px;
+}
 
 .overlay-col-img {
     flex: 0 0 55%;
