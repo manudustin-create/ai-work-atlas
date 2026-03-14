@@ -473,12 +473,12 @@ body {
     display: grid;
     /* grid-template-columns impostato da buildMatrix() */
     gap: 0;
-    padding: 6px 0;
+    padding: 2px 0;
     align-items: center;
 }
 
 .inforg-cell {
-    padding: 5px 8px;
+    padding: 2px 8px;
     border-right: 1px solid var(--black);
     display: flex;
     align-items: center;
@@ -735,7 +735,7 @@ body {
 .tile[data-f="Architect"] { border-left-color: var(--c-architect); }
 
 .tile-name {
-    font-size: 0.82rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--grey-70);
     line-height: 1.3;
