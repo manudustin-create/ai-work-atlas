@@ -237,6 +237,7 @@ var CELL_IMAGES = {
     "Society": {
         "Occluded": "assets/img/society-occluded.jpg",
         "Tool": "assets/img/Technological Society.jpg",
+        "Oracolo": "assets/img/SOcieta DATAISMO.jpg",
         "Mgmt": "assets/img/society-mgmt.jpg",
         "Visibilità": "assets/img/society-visibilita.png"
     }
