@@ -181,7 +181,8 @@ function buildMatrix() {
             var hasEX = items.some(function(d) { return d.overlays.includes('EX'); });
             
             var cellKw = CELL_KWS[row] && CELL_KWS[row][col.k] ? CELL_KWS[row][col.k] : '—';
-            var cellImg = CELL_IMAGES[row] && CELL_IMAGES[row][col.k] ? CELL_IMAGES[row][col.k] : null;
+            var cellImgRaw = CELL_IMAGES[row] && CELL_IMAGES[row][col.k] ? CELL_IMAGES[row][col.k] : null;
+            var cellImg = Array.isArray(cellImgRaw) ? cellImgRaw[0] : cellImgRaw;
             var cellEmpty = CELL_EMPTY[row] && CELL_EMPTY[row][col.k] ? CELL_EMPTY[row][col.k] : null;
             
             var cell = document.createElement('div');
@@ -322,7 +323,8 @@ function showDetail(id) {
 
     history.pushState(null, '', '#' + id);
 
-    var cellImg = CELL_IMAGES[item.layer] && CELL_IMAGES[item.layer][item.role] ? CELL_IMAGES[item.layer][item.role] : null;
+    var cellImgRaw = CELL_IMAGES[item.layer] && CELL_IMAGES[item.layer][item.role] ? CELL_IMAGES[item.layer][item.role] : null;
+    var cellImgs = cellImgRaw ? (Array.isArray(cellImgRaw) ? cellImgRaw : [cellImgRaw]) : null;
 
     var html = '';
     html += '<div class="overlay-header">';
@@ -341,11 +343,13 @@ function showDetail(id) {
     html += '<button class="overlay-close" onclick="hideOverlayPanel()">← Mappa</button>';
     html += '</div>';
 
-    html += '<div class="overlay-columns' + (cellImg ? ' has-image' : '') + '">';
+    var firstImg = cellImgs ? cellImgs[0] : null;
 
-    if (cellImg) {
+    html += '<div class="overlay-columns' + (firstImg ? ' has-image' : '') + '">';
+
+    if (firstImg) {
         html += '<div class="overlay-col-img">';
-        html += '<img class="overlay-img" src="' + cellImg + '" alt="' + item.name + '">';
+        html += '<img class="overlay-img" src="' + firstImg + '" alt="' + item.name + '">';
         html += '</div>';
     }
 
@@ -368,14 +372,36 @@ function showDetail(id) {
     html += '</div></div>';
 
     if (item.editorial) {
+        var editorialParts = item.editorial.split('<!--SPLIT-->');
         html += '<div class="overlay-editorial"><h3>Approfondimento</h3>';
-        html += item.editorial;
-        if (item.editorialSources) {
+        html += editorialParts[0];
+        if (editorialParts.length === 1 && item.editorialSources) {
             html += '<div class="overlay-editorial-sources"><h4>Riferimenti</h4><ul>';
             item.editorialSources.forEach(function(s) { html += '<li>' + s + '</li>'; });
             html += '</ul></div>';
         }
         html += '</div>';
+
+        if (editorialParts.length > 1 && cellImgs && cellImgs.length > 1) {
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            html += '<div class="overlay-columns has-image">';
+            html += '<div class="overlay-col-img">';
+            html += '<img class="overlay-img" src="' + cellImgs[1] + '" alt="' + item.name + '">';
+            html += '</div>';
+            html += '<div class="overlay-col-text">';
+            html += '<div class="overlay-body">';
+            html += '<div class="overlay-editorial">';
+            html += editorialParts[1];
+            if (item.editorialSources) {
+                html += '<div class="overlay-editorial-sources"><h4>Riferimenti</h4><ul>';
+                item.editorialSources.forEach(function(s) { html += '<li>' + s + '</li>'; });
+                html += '</ul></div>';
+            }
+            html += '</div>';
+        }
     }
 
     html += '</div>';
