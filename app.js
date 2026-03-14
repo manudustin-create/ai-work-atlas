@@ -350,6 +350,11 @@ function showDetail(id) {
     if (firstImg) {
         html += '<div class="overlay-col-img">';
         html += '<img class="overlay-img" src="' + firstImg + '" alt="' + item.name + '">';
+        if (cellImgs && cellImgs.length > 1 && !(item.editorial && item.editorial.indexOf('<!--SPLIT-->') !== -1)) {
+            for (var imgI = 1; imgI < cellImgs.length; imgI++) {
+                html += '<img class="overlay-img" style="margin-top:48px" src="' + cellImgs[imgI] + '" alt="' + item.name + '">';
+            }
+        }
         html += '</div>';
     }
 

@@ -227,7 +227,7 @@ var CELL_IMAGES = {
         "Oracolo": "assets/img/worker-oracolo.jpg",
         "Tool": ["assets/img/Worker as Augmentable Resource.jpg", "assets/img/worker-tool.png"],
         "Mgmt": "assets/img/worker-mgmt.jpg",
-        "Visibilità": "assets/img/worker-visibilita.png"
+        "Visibilità": ["assets/img/Worker branded 1.jpg", "assets/img/worker-visibilita.png"]
     },
     "HR": {
         "Occluded": "assets/img/HR X GHOST.jpg",
